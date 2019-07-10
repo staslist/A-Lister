@@ -1,0 +1,61 @@
+
+USER INPUT (ECHO): 
+ALister.py name-list Set1-DIFF-(Control-OR-(Treated1-AND-Treated2)) E:/Data/Sample_Input/Name_List/fileA.txt E:/Data/Sample_Input/Name_List/names_comma.txt -id tab comma -o E:/Data/Sample_Output/Name_List/Example2/ -od comma-row -v 
+
+USER INPUT (CLI ARGS): 
+Namespace(comparison_type=['name-list'], examples=None, id=['tab', 'comma'], input_file=['E:/Data/Sample_Input/Name_List/fileA.txt', 'E:/Data/Sample_Input/Name_List/names_comma.txt'], o=['E:/Data/Sample_Output/Name_List/Example2/'], od=['comma-row'], query=['Set1-DIFF-(Control-OR-(Treated1-AND-Treated2))'], v=1)
+List of groups / paired comparisons to be examined:
+['Set1', 'Control', 'Treated1', 'Treated2']
+Current subquery: 
+Treated1-AND-Treated2  =  $1
+The groups being compared are current vector values and Treated2.
+
+Current vector values( 8  values): 
+['AADACP1', 'AMOTL2', 'AMY1C', 'AMY2B', 'DUSP5P1', 'ENKUR', 'ENPP7', 'KLF10']
+
+The current set operator is: AND
+
+Treated2 values( 9  values): 
+['AADACP1', 'AMICA1', 'AMIGO2', 'AMPD3', 'AMY2A', 'EPB41L2', 'EPB41L3', 'EPB41L4A-AS2', 'KLF10']
+
+The resultant vector values( 2  values): 
+['AADACP1', 'KLF10']
+
+Current subquery: 
+Control-OR-$1  =  $2
+The groups being compared are current vector values and $1.
+
+Current vector values( 11  values): 
+['AADACL2', 'AADACL4', 'ACAD9', 'AMIGO3', 'DUSP21', 'ENHO', 'ENPP1', 'NPY2R', 'PHF23', 'PHOX2A', 'UBIAD1']
+
+The current set operator is: OR
+
+$1 values( 2  values): 
+['AADACP1', 'KLF10']
+
+The resultant vector values( 13  values): 
+['AADACL2', 'AADACL4', 'AADACP1', 'ACAD9', 'AMIGO3', 'DUSP21', 'ENHO', 'ENPP1', 'KLF10', 'NPY2R', 'PHF23', 'PHOX2A', 'UBIAD1'
+]
+
+Current subquery: 
+Set1-DIFF-$2  =  $3
+The groups being compared are current vector values and $2.
+
+Current vector values( 20  values): 
+['ACAD9', 'ACTA2', 'ACTG1', 'ACTN1', 'ADAMTS1', 'ADAMTS9', 'EXD1', 'FLNA', 'FLNB', 'KLF10', 'KLF2', 'KLF4', 'OR1S1', 'PIK3IP1
+', 'PIK3R3', 'SLC12A2', 'SLC20A1', 'SLC25A25', 'TNFSF10', 'ZFAT-AS1']
+
+The current set operator is: DIFF
+
+$2 values( 13  values): 
+['AADACL2', 'AADACL4', 'AADACP1', 'ACAD9', 'AMIGO3', 'DUSP21', 'ENHO', 'ENPP1', 'KLF10', 'NPY2R', 'PHF23', 'PHOX2A', 'UBIAD1'
+]
+
+The resultant vector values( 18  values): 
+['ACTA2', 'ACTG1', 'ACTN1', 'ADAMTS1', 'ADAMTS9', 'EXD1', 'FLNA', 'FLNB', 'KLF2', 'KLF4', 'OR1S1', 'PIK3IP1', 'PIK3R3', 'SLC1
+2A2', 'SLC20A1', 'SLC25A25', 'TNFSF10', 'ZFAT-AS1']
+
+The result values( 18  values): 
+['ACTA2', 'ACTG1', 'ACTN1', 'ADAMTS1', 'ADAMTS9', 'EXD1', 'FLNA', 'FLNB', 'KLF2', 'KLF4', 'OR1S1', 'PIK3IP1', 'PIK3R3', 'SLC1
+2A2', 'SLC20A1', 'SLC25A25', 'TNFSF10', 'ZFAT-AS1']
+

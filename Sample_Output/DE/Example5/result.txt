@@ -1,0 +1,30 @@
+Query: M2Low*M2High:UP-AND-M4Low*M4High:UP-AND-M5Low*M5High:UP
+Number of values: (5)
+ENSG00000117394
+ENSG00000122884
+ENSG00000134333
+ENSG00000148926
+ENSG00000214110
+
+Query: M2Low*M2High:UP-AND-M4Low*M4High:UP-AND-M5Low*M5High:DOWN
+Number of values: (0)
+
+Query: M2Low*M2High:UP-AND-M4Low*M4High:DOWN-AND-M5Low*M5High:UP
+Number of values: (0)
+
+Query: M2Low*M2High:UP-AND-M4Low*M4High:DOWN-AND-M5Low*M5High:DOWN
+Number of values: (1)
+ENSG00000171246
+
+Query: M2Low*M2High:DOWN-AND-M4Low*M4High:UP-AND-M5Low*M5High:UP
+Number of values: (0)
+
+Query: M2Low*M2High:DOWN-AND-M4Low*M4High:UP-AND-M5Low*M5High:DOWN
+Number of values: (0)
+
+Query: M2Low*M2High:DOWN-AND-M4Low*M4High:DOWN-AND-M5Low*M5High:UP
+Number of values: (0)
+
+Query: M2Low*M2High:DOWN-AND-M4Low*M4High:DOWN-AND-M5Low*M5High:DOWN
+Number of values: (0)
+

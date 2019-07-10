@@ -1,0 +1,26 @@
+
+USER INPUT (ECHO): 
+ALister.py name-list Treated1-AND-Treated2 E:/Data/Sample_Input/Name_List/names_comma.txt -id comma -o E:/Data/Sample_Output/Name_List/Example1/ -od tab -v 
+
+USER INPUT (CLI ARGS): 
+Namespace(comparison_type=['name-list'], examples=None, id=['comma'], input_file=['E:/Data/Sample_Input/Name_List/names_comma.txt'], o=['E:/Data/Sample_Output/Name_List/Example1/'], od=['tab'], query=['Treated1-AND-Treated2'], v=1)
+List of groups / paired comparisons to be examined:
+['Treated1', 'Treated2']
+Current subquery: 
+Treated1-AND-Treated2  =  $1
+The groups being compared are current vector values and Treated2.
+
+Current vector values( 8  values): 
+['AADACP1', 'AMOTL2', 'AMY1C', 'AMY2B', 'DUSP5P1', 'ENKUR', 'ENPP7', 'KLF10']
+
+The current set operator is: AND
+
+Treated2 values( 9  values): 
+['AADACP1', 'AMICA1', 'AMIGO2', 'AMPD3', 'AMY2A', 'EPB41L2', 'EPB41L3', 'EPB41L4A-AS2', 'KLF10']
+
+The resultant vector values( 2  values): 
+['AADACP1', 'KLF10']
+
+The result values( 2  values): 
+['AADACP1', 'KLF10']
+

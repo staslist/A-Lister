@@ -1,0 +1,7 @@
+File Path: E:/Data/Sample_Input/DE_Series/GSE126785_M2M4M5.csv
+Query:     M2Low*M2High:DOWN-AND-M4Low*M4High:DOWN-AND-M5Low*M5High:UP
+
+Number of rows in DATA: (0)
+
+GeneID,log2(FC)M2,P-valueM2,P-adjM2,log2(FC)M4,P-valueM4,P-adjM4,log2(FC)M5,P-valueM5,P-adjM5
+

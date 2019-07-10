@@ -1,0 +1,57 @@
+
+USER INPUT (ECHO): 
+ALister.py diff-expression E:/Data/Sample_Input/DE_Sample/GSE76453_cuffdiff_siCtl.diff E:/Data/Sample_Input/DE_Sample/GSE76453_cuffdiff_siZNF143.diff -pc q1->Ctl_veh,q2->Ctl_E2 q1->ZNF143_veh,q2->ZNF143_E2 -dq ZNF143_veh*ZNF143_E2-DIFF-Ctl_veh*Ctl_E2 -o E:/Data/Sample_Output/DE/Example1/ -n gene -s1 sample_1 -s2 sample_2 -f log2(fold_change):agt1.2,q_value:lt0.05,value_1:gt1.0,value_2:gt1.0 -v 
+
+USER INPUT (CLI ARGS): 
+Namespace(comparison_type=['diff-expression'], dq=['ZNF143_veh*ZNF143_E2-DIFF-Ctl_veh*Ctl_E2'], examples=None, f=['log2(fold_change):agt1.2,q_value:lt0.05,value_1:gt1.0,value_2:gt1.0'], fc=['log2(fold_change)'], id=['tab', 'tab'], input_file=['E:/Data/Sample_Input/DE_Sample/GSE76453_cuffdiff_siCtl.diff', 'E:/Data/Sample_Input/DE_Sample/GSE76453_cuffdiff_siZNF143.diff'], n=['gene'], o=['E:/Data/Sample_Output/DE/Example1/'], od=['tab'], pc=['q1->Ctl_veh,q2->Ctl_E2', 'q1->ZNF143_veh,q2->ZNF143_E2'], s1=['sample_1'], s2=['sample_2'], v=1)
+
+File Headers:  [['test_id', 'gene_id', 'gene', 'locus', 'sample_1', 'sample_2', 'status', 'value_1', 'value_2', 'log2(fold_change)', 'test_stat', 'p_value', 'q_value', 'significant'], ['test_id', 'gene_id', 'gene', 'locus', 'sample_1', 'sample_2', 'status', 'value_1', 'value_2', 'log2(fold_change)', 'test_stat', 'p_value', 'q_value', 'significant']]
+
+File Info:
+Filename: E:/Data/Sample_Input/DE_Sample/GSE76453_cuffdiff_siCtl.diff
+Data Type: DE-Sample
+Delimiter: tab
+Pairwise comparison map: {'q1': 'Ctl_veh', 'q2': 'Ctl_E2'}
+Id column number: [2]
+Fold change column number(s): [9]
+Sample 1 column number: [4]
+Sample 2 column number: [5]
+Filter by column numbers: [9, 12, 7, 8]
+Filter by column cutoffs: ['agt1.2', 'lt0.05', 'gt1.0', 'gt1.0']
+
+
+File Info:
+Filename: E:/Data/Sample_Input/DE_Sample/GSE76453_cuffdiff_siZNF143.diff
+Data Type: DE-Sample
+Delimiter: tab
+Pairwise comparison map: {'q1': 'ZNF143_veh', 'q2': 'ZNF143_E2'}
+Id column number: [2]
+Fold change column number(s): [9]
+Sample 1 column number: [4]
+Sample 2 column number: [5]
+Filter by column numbers: [9, 12, 7, 8]
+Filter by column cutoffs: ['agt1.2', 'lt0.05', 'gt1.0', 'gt1.0']
+
+
+The current query is: ZNF143_veh*ZNF143_E2-DIFF-Ctl_veh*Ctl_E2
+List of groups / paired comparisons to be examined:
+['Ctl_veh*Ctl_E2', 'ZNF143_veh*ZNF143_E2']
+Current subquery: 
+ZNF143_veh*ZNF143_E2-DIFF-Ctl_veh*Ctl_E2  =  $1
+The groups being compared are current vector values and Ctl_veh*Ctl_E2.
+
+Current vector values( 13  values): 
+['AMZ1', 'FMN1', 'GPR68', 'GREB1', 'MYB', 'MYBL1', 'MYC', 'NPY1R', 'PEX11A', 'RAPGEFL1', 'RARA', 'SIGLEC15', 'SYBU']
+
+The current set operator is: DIFF
+
+Ctl_veh*Ctl_E2 values( 16  values): 
+['AMZ1', 'BIRC3', 'C1ORF226,NOS1AP', 'CISH', 'CXCL12', 'DLC1', 'FMN1', 'GPR68', 'GREB1', 'HEY2', 'MYB', 'MYBL1', 'MYC', 'NPY1
+R', 'RAPGEFL1', 'SEC14L2']
+
+The resultant vector values( 4  values): 
+['PEX11A', 'RARA', 'SIGLEC15', 'SYBU']
+
+The result values( 4  values): 
+['PEX11A', 'RARA', 'SIGLEC15', 'SYBU']
+

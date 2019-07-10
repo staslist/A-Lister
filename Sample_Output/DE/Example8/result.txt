@@ -1,0 +1,4 @@
+Query: EVP*D-AND-CPOS*CNEG
+Number of values: (5)
+FIBIN,ICA1,IFT122,LMO7,TPPP3
+

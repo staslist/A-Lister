@@ -1,0 +1,124 @@
+
+USER INPUT (ECHO): 
+ALister.py diff-expression E:/Data/Sample_Input/DE_Series/GSE114528_differential_exp_EVP_D.tsv E:/Data/Sample_Input/DE_Sample/GSE99397_CreNeg-MHCPos_vs_CrePos-MHCNeg.diff -pc EVP*D->log2FoldChange CrePos-MHCNeg->CPOS,CreNeg-MHCPos->CNEG -dq EVP*D-AND-CPOS*CNEG -fc log2FoldChange log2(fold_change) -o E:/Data/Sample_Output/DE/Example8/ -od comma-row -f padj:lt1E-5,log2FoldChange:agt2.5,baseMean:gt500 log2(fold_change):agt0.85,p_value:lt0.05 -v -s1 NONE sample_1 -s2 NONE sample_2 -n Gene_Name gene 
+
+USER INPUT (CLI ARGS): 
+Namespace(comparison_type=['diff-expression'], dq=['EVP*D-AND-CPOS*CNEG'], examples=None, f=['padj:lt1E-5,log2FoldChange:agt2.5,baseMean:gt500', 'log2(fold_change):agt0.85,p_value:lt0.05'], fc=['log2FoldChange', 'log2(fold_change)'], id=['tab', 'tab'], input_file=['E:/Data/Sample_Input/DE_Series/GSE114528_differential_exp_EVP_D.tsv', 'E:/Data/Sample_Input/DE_Sample/GSE99397_CreNeg-MHCPos_vs_CrePos-MHCNeg.diff'], n=['Gene_Name', 'gene'], o=['E:/Data/Sample_Output/DE/Example8/'], od=['comma-row'], pc=['EVP*D->log2FoldChange', 'CrePos-MHCNeg->CPOS,CreNeg-MHCPos->CNEG'], s1=['NONE', 'sample_1'], s2=['NONE', 'sample_2'], v=1)
+
+File Headers:  [['Ensembl_Gene_ID', 'Gene_Name', 'Chromosome_Name', 'Gene_Start', 'Gene_End', 'baseMean', 'log2FoldChange', 'lfcSE', 'stat', 'pvalue', 'padj'], ['test_id', 'gene_id', 'gene', 'locus', 'sample_1', 'sample_2', 'status', 'value_1', 'value_2', 'log2(fold_change)', 'test_stat', 'p_value', 'q_value', 'significant']]
+
+File Info:
+Filename: E:/Data/Sample_Input/DE_Series/GSE114528_differential_exp_EVP_D.tsv
+Data Type: DE-Series
+Delimiter: tab
+Pairwise comparison map: {'EVP*D': [6]}
+Id column number: [1]
+Fold change column number(s): [6]
+Sample 1 column number: [-1]
+Sample 2 column number: [-1]
+Filter by column numbers: [10, 6, 5]
+Filter by column cutoffs: ['lt1E-5', 'agt2.5', 'gt500']
+
+
+File Info:
+Filename: E:/Data/Sample_Input/DE_Sample/GSE99397_CreNeg-MHCPos_vs_CrePos-MHCNeg.diff
+Data Type: DE-Sample
+Delimiter: tab
+Pairwise comparison map: {'CrePos-MHCNeg': 'CPOS', 'CreNeg-MHCPos': 'CNEG'}
+Id column number: [2]
+Fold change column number(s): [9]
+Sample 1 column number: [4]
+Sample 2 column number: [5]
+Filter by column numbers: [9, 11]
+Filter by column cutoffs: ['agt0.85', 'lt0.05']
+
+
+The current query is: EVP*D-AND-CPOS*CNEG
+List of groups / paired comparisons to be examined:
+['EVP*D', 'CPOS*CNEG']
+Current subquery: 
+EVP*D-AND-CPOS*CNEG  =  $1
+The groups being compared are current vector values and CPOS*CNEG.
+
+Current vector values( 651  values): 
+['2610203C20RIK', '2810025M15RIK', '2900026A02RIK', '4930502E18RIK', '8430408G22RIK', 'ABCC9', 'ABCG1', 'ABI3BP', 'ADAM33', '
+ADAMTS12', 'ADAMTS15', 'ADAMTS2', 'ADAMTS5', 'ADAMTS7', 'ADAMTSL1', 'ADCY4', 'ADCY7', 'ADGRD1', 'ADGRF5', 'ADGRG1', 'ADGRL2',
+ 'ADGRL4', 'ADH1', 'ADORA2A', 'ADORA2B', 'AEBP1', 'AFAP1L1', 'AGTR1A', 'AHNAK2', 'AK1', 'AKR1C18', 'AKT2', 'ALDH1A1', 'ALDH1A
+3', 'ANGPT2', 'ANGPTL2', 'ANPEP', 'ANTXR1', 'APLN', 'APLNR', 'APOD', 'APOLD1', 'AQP1', 'AR', 'ARAP3', 'ARHGAP18', 'ARHGAP24',
+ 'ARHGAP25', 'ARHGAP27', 'ARHGAP42', 'ARHGEF15', 'ARHGEF25', 'ARSI', 'ASPN', 'AW551984', 'AXL', 'B3GALNT1', 'B3GNT3', 'B4GALT
+4', 'BAMBI', 'BC028528', 'BCAT1', 'BCL6B', 'BCR', 'BGN', 'BICC1', 'BMPER', 'BTNL9', 'C1QTNF2', 'C1QTNF3', 'C1QTNF9', 'C1RA', 
+'C1S1', 'C3', 'C4B', 'CAV2', 'CAVIN2', 'CCDC80', 'CCDC85C', 'CCL11', 'CCL2', 'CCL7', 'CCND1', 'CD200', 'CD248', 'CD300LG', 'C
+D302', 'CD36', 'CD38', 'CD44', 'CD55', 'CD93', 'CDC42EP3', 'CDH11', 'CDH13', 'CDH5', 'CEBPD', 'CELF2', 'CERCAM', 'CERS6', 'CE
+S2E', 'CFH', 'CHD7', 'CHL1', 'CHPF', 'CHRDL1', 'CHST15', 'CHST2', 'CILP', 'CLCA2', 'CLDN5', 'CLEC14A', 'CLEC1A', 'CLEC3B', 'C
+LMP', 'CMAH', 'COL12A1', 'COL13A1', 'COL14A1', 'COL16A1', 'COL1A1', 'COL1A2', 'COL3A1', 'COL5A1', 'COL5A2', 'COL5A3', 'COL6A1
+', 'COL6A2', 'COL6A3', 'COL8A1', 'COLEC12', 'CP', 'CPED1', 'CPQ', 'CPXM1', 'CRACR2B', 'CREB3L1', 'CREB5', 'CRIM1', 'CRISPLD2'
+, 'CRYAB', 'CSF1', 'CTHRC1', 'CTLA2A', 'CTSH', 'CTSK', 'CTTNBP2NL', 'CXCL1', 'CXCL13', 'CXCL14', 'CXCL5', 'CYGB', 'CYP1B1', '
+CYP7B1', 'CYYR1', 'DAPK1', 'DAPK2', 'DCBLD1', 'DCLK1', 'DCN', 'DDR2', 'DEGS1', 'DGKZ', 'DLL4', 'DNM3OS', 'DOCK11', 'DOCK6', '
+DOCK7', 'DOCK9', 'DOK4', 'DPEP1', 'DPP4', 'DPT', 'DRAM1', 'DSE', 'DUSP3', 'DYSF', 'ECM1', 'ECSCR', 'EDNRA', 'EDNRB', 'EFEMP1'
+, 'EFEMP2', 'EFNA1', 'EFNB2', 'EGFL7', 'EGFR', 'EGR1', 'EGR2', 'EHD4', 'ELK3', 'ELN', 'EMB', 'EMCN', 'EMILIN2', 'EML1', 'ENAH
+', 'ENDOD1', 'ENG', 'ENPEP', 'ENPP1', 'ENTPD1', 'EPAS1', 'EPB41L3', 'EPDR1', 'ERRFI1', 'ESAM', 'ESM1', 'ESR1', 'ETS1', 'ETS2'
+, 'EXOC3L', 'EXOC6', 'F11R', 'F3', 'FABP4', 'FAM167B', 'FAM212A', 'FAM43A', 'FAM46A', 'FAP', 'FAT1', 'FBLN1', 'FBLN2', 'FBN1'
+, 'FEZ1', 'FGD5', 'FGF7', 'FGL2', 'FHL1', 'FIBIN', 'FKBP11', 'FLI1', 'FLRT2', 'FLT1', 'FLT4', 'FMNL3', 'FN1', 'FNDC1', 'FOS',
+ 'FOSB', 'FOXD2OS', 'FRMD4B', 'FST', 'FSTL1', 'FXYD6', 'GAA', 'GABRA3', 'GADD45B', 'GALNT16', 'GALNT18', 'GAS1', 'GAS6', 'GAS
+7', 'GBP4', 'GFPT2', 'GGT5', 'GGTA1', 'GIMAP1', 'GIMAP4', 'GIMAP5', 'GIMAP6', 'GIMAP9', 'GJA4', 'GLIPR2', 'GM12002', 'GMPR', 
+'GNG11', 'GNG2', 'GPC3', 'GPC6', 'GPIHBP1', 'GPM6B', 'GPR153', 'GPR4', 'GPX3', 'GRAP', 'GSN', 'GSTT1', 'H6PD', 'HAS1', 'HCLS1
+', 'HEY1', 'HIP1', 'HK2', 'HLX', 'HP', 'HSD11B1', 'HSPB8', 'HTRA1', 'HTRA3', 'ICA1', 'ICAM2', 'ID1', 'IFI205', 'IFI207', 'IFI
+211', 'IFI27L2A', 'IFIT1', 'IFT122', 'IGF1', 'IGFBP3', 'IGFBP5', 'IGFBP6', 'IGSF10', 'IGSF3', 'IL11RA1', 'IL17RA', 'IL1R1', '
+IL1R2', 'IL1RL1', 'IL1RL2', 'IL2RG', 'IL33', 'IL6', 'INHBA', 'INHBB', 'INPP5D', 'IPO11', 'ISLR', 'ITGA3', 'ITGA6', 'ITGA9', '
+ITGB5', 'ITM2A', 'ITPKB', 'JAG2', 'JAK3', 'JUP', 'KANK3', 'KCNE3', 'KCNQ1', 'KCTD11', 'KCTD12B', 'KDR', 'KIT', 'KLF4', 'KLF9'
+, 'KLHL13', 'KLHL3', 'KLHL4', 'KLHL6', 'LAMA2', 'LAMA5', 'LBP', 'LCP2', 'LDB2', 'LHFP', 'LHFPL2', 'LIPT2', 'LMO7', 'LOX', 'LO
+XL1', 'LOXL2', 'LOXL3', 'LPAR1', 'LPAR6', 'LPL', 'LRG1', 'LRP1', 'LRRC15', 'LRRC17', 'LRRC3B', 'LRRC8C', 'LRRN4CL', 'LSP1', '
+LTBP1', 'LUM', 'MALL', 'MAP3K11', 'MAP4K3', 'MATN2', 'MCAM', 'MCF2L', 'MECOM', 'MEDAG', 'MEG3', 'MEGF9', 'MEST', 'MFAP2', 'MF
+AP4', 'MFAP5', 'MFNG', 'MGAT4A', 'MGP', 'MGST1', 'MMP15', 'MMP19', 'MMP2', 'MMP23', 'MMP3', 'MMRN2', 'MPZL1', 'MRC2', 'MS4A4D
+', 'MS4A6D', 'MT1', 'MT2', 'MTUS1', 'MYCT1', 'MYO10', 'MYO18A', 'N4BP3', 'NAAA', 'NBL1', 'NCAM1', 'NCS1', 'NDN', 'NDRG2', 'ND
+RG4', 'NDUFA4L2', 'NEDD9', 'NES', 'NID2', 'NNMT', 'NOS3', 'NOSTRIN', 'NOTCH1', 'NOTCH2', 'NOTCH4', 'NOV', 'NRP2', 'NRROS', 'N
+SG1', 'NT5E', 'NTRK2', 'NUPR1', 'NUS1', 'OAS2', 'OGN', 'OLFML3', 'OSMR', 'OSR1', 'P4HA3', 'PALD1', 'PALMD', 'PAMR1', 'PCDH1',
+ 'PCDH12', 'PCOLCE', 'PCOLCE2', 'PCSK5', 'PDE4B', 'PDGFB', 'PDGFRA', 'PDGFRB', 'PDPN', 'PECAM1', 'PENK', 'PGM2L1', 'PI16', 'P
+IEZO2', 'PITPNC1', 'PKN3', 'PLA1A', 'PLA2G4A', 'PLAC8', 'PLCB1', 'PLEKHF1', 'PLK2', 'PLOD2', 'PLPP1', 'PLVAP', 'PLXDC2', 'PLX
+NA2', 'PLXND1', 'PODXL', 'POSTN', 'PPARG', 'PPM1F', 'PPM1J', 'PPP1R16B', 'PRAG1', 'PRDM1', 'PRELP', 'PREX2', 'PRG4', 'PRKCH',
+ 'PRKD2', 'PRODH', 'PRRX1', 'PTGIS', 'PTGS2', 'PTP4A3', 'PTPRB', 'PTPRE', 'PTPRM', 'PTPRS', 'PTX3', 'PYGL', 'QPCT', 'RAB32', 
+'RAB34', 'RAB7B', 'RAPGEF3', 'RAPGEF5', 'RARRES2', 'RASGRP3', 'RASIP1', 'RBMS3', 'RBP7', 'RCN1', 'RCN3', 'RDH10', 'RELL1', 'R
+FLNB', 'RGCC', 'RHBDL2', 'RNASE4', 'ROBO4', 'RORA', 'RRAS2', 'RUNX1', 'S1PR1', 'S1PR2', 'S1PR3', 'SAA3', 'SAT1', 'SCARA3', 'S
+CARA5', 'SCARB1', 'SCARF1', 'SCD1', 'SCN7A', 'SDC1', 'SDC2', 'SDC4', 'SEMA3C', 'SEMA3F', 'SEMA6D', 'SEPT4', 'SERPINA3N', 'SER
+PINB2', 'SERPINE1', 'SERPINE2', 'SERPINF1', 'SERPING1', 'SFRP2', 'SFRP4', 'SH2D3C', 'SH3BGRL2', 'SH3D19', 'SH3PXD2B', 'SH3TC1
+', 'SHE', 'SIGIRR', 'SLC10A6', 'SLC16A1', 'SLC16A2', 'SLC16A6', 'SLC39A14', 'SLC46A3', 'SLC9A3R2', 'SLIT3', 'SMOC2', 'SMPD3',
+ 'SNED1', 'SNHG11', 'SNHG18', 'SNRK', 'SOD3', 'SOX17', 'SOX18', 'SOX7', 'SPARCL1', 'SPATA13', 'SPON1', 'SPON2', 'SPP1', 'SPRY
+4', 'SPSB1', 'SRPX', 'SRPX2', 'SSBP2', 'ST8SIA4', 'STAB1', 'STAMBPL1', 'STAP2', 'STARD8', 'STC1', 'STEAP1', 'STEAP2', 'STEAP3
+', 'STEAP4', 'STK10', 'SULF1', 'SULF2', 'SVEP1', 'SYTL2', 'TCF4', 'TCIM', 'TGFB3', 'TGFBR3', 'THBS2', 'THBS3', 'THBS4', 'THSD
+1', 'THY1', 'TIE1', 'TIMP1', 'TIMP2', 'TINAGL1', 'TJP1', 'TLN2', 'TMEFF2', 'TMEM100', 'TMEM119', 'TMEM204', 'TMEM252', 'TMEM2
+55A', 'TMEM45A', 'TMEM47', 'TMEM88', 'TNC', 'TNFAIP1', 'TNFAIP6', 'TNFAIP8L1', 'TNFRSF11B', 'TNFRSF9', 'TNFSF9', 'TNXB', 'TPB
+G', 'TPM2', 'TPPP3', 'TRP53I11', 'TSPAN12', 'TSPAN13', 'TSPAN14', 'TSPAN15', 'TSPAN18', 'TSPAN7', 'TSPAN9', 'UACA', 'UAP1', '
+UGDH', 'UNC5B', 'UPP1', 'USHBP1', 'VAMP5', 'VASN', 'VCAN', 'VEGFD', 'VGLL3', 'VWA1', 'WISP2', 'WNT2', 'XDH', 'ZBP1', 'ZEB2', 
+'ZFP57', 'ZFP69']
+
+The current set operator is: AND
+
+CPOS*CNEG values( 232  values): 
+['0610010O12RIK', '1700006E09RIK', '1700095J07RIK', '2010001A14RIK', '2210404O07RIK', '3110009E18RIK', '4930500J02RIK', '4933
+406I18RIK', '6330545A04RIK', '7SK', '7SK', 'AC073553.1', 'AC073553.2', 'AC073553.3', 'AC102240.1', 'AC112681.1', 'AC114917.1'
+, 'AC122119.1', 'AC122247.1', 'AC126435.1', 'AC128668.1', 'AC132575.1', 'AC149599.1', 'AC163663.1', 'AICDA', 'AL450399.1', 'A
+L627182.1', 'AL671211.1', 'AL713994.1', 'AL772349.1', 'APBB2', 'ATP2A1', 'BEND6', 'CAR9', 'CBX8', 'CCNB1', 'CDCA5', 'CHEK1', 
+'CHRNA9', 'CLEC4A2', 'CLSPN', 'COL9A3', 'COX7B', 'CT025680.1', 'DCT', 'DECR2', 'DNTT', 'EIF4E1B', 'FANCD2', 'FIBIN', 'FMN1', 
+'FUBP3', 'GAB3', 'GHRL', 'GM10073', 'GM10159', 'GM10275', 'GM10451', 'GM10631', 'GM10651', 'GM10800', 'GM10801', 'GM11029', '
+GM11407', 'GM11410', 'GM11942', 'GM12231', 'GM12439', 'GM12563', 'GM12715', 'GM12896', 'GM12949', 'GM13680', 'GM14292', 'GM14
+586', 'GM15118', 'GM15429', 'GM15515', 'GM15662', 'GM16710', 'GM16869', 'GM17301', 'GM17387', 'GM17510', 'GM5424', 'GM5611', 
+'GM5805', 'GM5913', 'GM600', 'GM6382', 'GM6563', 'GM6767', 'GM7027', 'GM7327', 'GM7536', 'GM8692', 'GM9493', 'GM9762', 'GM979
+0', 'GM9835', 'GPR83', 'GPRIN1', 'GULP1', 'GZMB', 'HAL', 'ICA1', 'IFT122', 'IGHE', 'IGHG1', 'IGHJ2', 'IGHV1-23', 'IGHV1-26', 
+'IGHV1-47', 'IGHV1-58', 'IGHV1-59', 'IGHV1-61', 'IGHV1-63', 'IGHV1-69', 'IGHV1-7', 'IGHV1-72', 'IGHV1-76', 'IGHV1-77', 'IGHV1
+-78', 'IGHV1-80', 'IGHV1-82', 'IGHV1-9', 'IGHV10-1', 'IGHV10-3', 'IGHV14-3', 'IGHV2-3', 'IGHV2-6', 'IGHV2-9-1', 'IGHV3-5', 'I
+GHV3-6', 'IGHV3-8', 'IGHV5-6', 'IGHV5-9', 'IGHV7-3', 'IGHV7-4', 'IGHV9-2', 'IGKJ1', 'IGKV1-122', 'IGKV1-88', 'IGKV10-95', 'IG
+KV12-38', 'IGKV12-89', 'IGKV12-98', 'IGKV15-103', 'IGKV16-104', 'IGKV17-121', 'IGKV17-127', 'IGKV19-93', 'IGKV2-109', 'IGKV2-
+137', 'IGKV3-2', 'IGKV3-4', 'IGKV3-7', 'IGKV4-55', 'IGKV4-57', 'IGKV4-57-1', 'IGKV4-61', 'IGKV4-69', 'IGKV4-70', 'IGKV4-72', 
+'IGKV4-80', 'IGKV4-91', 'IGKV4-92', 'IGKV5-39', 'IGKV5-45', 'IGKV6-14', 'IGKV6-15', 'IGKV6-17', 'IGKV6-23', 'IGKV6-29', 'IGKV
+7-33', 'IGKV8-16', 'IGKV8-18', 'IGKV8-21', 'IGKV9-120', 'IGLV1', 'ILDR1', 'KRT7', 'LMO7', 'MIR5107', 'MIR5136', 'MLANA', 'MPO
+', 'MYBL1', 'MYH4', 'MYO5B', 'N-R5S207', 'NAV3', 'NEIL1', 'NGP', 'NLE1', 'NRN1', 'NTNG1', 'NUF2', 'P4HA2', 'PAQR6', 'PDCD2L',
+ 'PRSS36', 'PTPN6', 'PVALB', 'RASSF6', 'RNF157', 'RNFT2', 'RPL10-PS3', 'RPL19-PS11', 'RPL9-PS6', 'RPS10-PS1', 'RPS24-PS3', 'R
+PSA-PS10', 'S100A8', 'SENP3', 'SNORA48', 'SNORD37', 'STXBP3B', 'TMEM143', 'TPPP3', 'TPT1-PS3', 'TRAJ22', 'TRAJ36', 'TRAJ37', 
+'TRAJ52', 'U12', 'U5', 'U6', 'U6', 'USP2', 'VAULT', 'ZFP513']
+
+The resultant vector values( 5  values): 
+['FIBIN', 'ICA1', 'IFT122', 'LMO7', 'TPPP3']
+
+The result values( 5  values): 
+['FIBIN', 'ICA1', 'IFT122', 'LMO7', 'TPPP3']
+

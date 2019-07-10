@@ -1,0 +1,7 @@
+File Path: E:/Data/Sample_Input/DE_Series/GSE126785_M4.txt
+Query:     M2Low*M2High-DIFF-(M5Low*M5High-OR-M4Low*M4High)
+
+Number of rows in DATA: (0)
+
+1.GeneID	2.Base mean	3.log2(FC)	4.StdErr	5.Wald-Stats	6.P-value	7.P-adj
+

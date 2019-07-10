@@ -1,0 +1,166 @@
+
+USER INPUT (ECHO): 
+ALister.py diff-expression E:/Data/Sample_Input/DE_Sample/GSE108643_Cuffdiff.txt -pc LeanPre->LPE,LeanPost->LPO,OvobPre->OPE,OvobPost->OPO -dq LPE*LPO:ALL-AND-OPE*OPO:ALL -o E:/Data/Sample_Output/DE/Example3/ -f log2(fold_change):agt1.0,q_value:lt0.05,value_1:gt1.0,value_2:gt1.0 -v -s1 sample_1 -s2 sample_2 -n gene 
+
+USER INPUT (CLI ARGS): 
+Namespace(comparison_type=['diff-expression'], dq=['LPE*LPO:ALL-AND-OPE*OPO:ALL'], examples=None, f=['log2(fold_change):agt1.0,q_value:lt0.05,value_1:gt1.0,value_2:gt1.0'], fc=['log2(fold_change)'], id=['tab'], input_file=['E:/Data/Sample_Input/DE_Sample/GSE108643_Cuffdiff.txt'], n=['gene'], o=['E:/Data/Sample_Output/DE/Example3/'], od=['tab'], pc=['LeanPre->LPE,LeanPost->LPO,OvobPre->OPE,OvobPost->OPO'], s1=['sample_1'], s2=['sample_2'], v=1)
+
+File Headers:  [['test_id', 'gene_id', 'gene', 'locus', 'sample_1', 'sample_2', 'status', 'value_1', 'value_2', 'log2(fold_change)', 'test_stat', 'p_value', 'q_value', 'significant']]
+
+File Info:
+Filename: E:/Data/Sample_Input/DE_Sample/GSE108643_Cuffdiff.txt
+Data Type: DE-Sample
+Delimiter: tab
+Pairwise comparison map: {'LeanPre': 'LPE', 'LeanPost': 'LPO', 'OvobPre': 'OPE', 'OvobPost': 'OPO'}
+Id column number: [2]
+Fold change column number(s): [9]
+Sample 1 column number: [4]
+Sample 2 column number: [5]
+Filter by column numbers: [9, 12, 7, 8]
+Filter by column cutoffs: ['agt1.0', 'lt0.05', 'gt1.0', 'gt1.0']
+
+
+The current query is: LPE*LPO:UP-AND-OPE*OPO:UP
+List of groups / paired comparisons to be examined:
+['LPE*LPO:UP', 'OPE*OPO:UP']
+Current subquery: 
+LPE*LPO:UP-AND-OPE*OPO:UP  =  $1
+The groups being compared are current vector values and OPE*OPO:UP.
+
+Current vector values( 174  values): 
+['ABHD2', 'ABRA', 'ACKR3', 'ACTA2', 'ACTG1', 'ACTN1', 'ACTN4', 'ADAMTS1', 'ADAMTS9', 'ADRB2', 'AKAP12', 'ALG2', 'ANKRD1', 'AN
+KRD37', 'APLN', 'APOLD1', 'ARRDC4', 'ATF3', 'ATP1B3', 'ATP8B1', 'B3GNT5', 'BCAR1', 'BCL6B', 'BHLHE40', 'BTG2', 'BTG3', 'C8ORF
+4', 'CASKIN2', 'CCL2', 'CDC42EP1', 'CDKN1A', 'CDR2', 'CHMP1B', 'CHORDC1', 'CHST3', 'CISH', 'CNN1', 'CORO1C', 'COTL1', 'CREB5'
+, 'CRISPLD2', 'CSRNP1', 'CSRP1', 'CTGF', 'CX3CL1', 'CXCL2', 'CYR61', 'DLC1', 'DNAJA1', 'DUSP16', 'DYNLL1', 'EDNRB', 'EGR1', '
+ELOVL5', 'EMP1', 'EMP3', 'ERRFI1', 'ETS2', 'FAM179A', 'FGF6', 'FKBP5', 'FLNA', 'FLNB', 'FOS', 'FOSL2', 'G0S2', 'GADD45B', 'GB
+P1', 'GDNF', 'GRASP', 'HBA2', 'HES1', 'HEY1', 'HEYL', 'HK2', 'HMOX1', 'HSPH1', 'ID1', 'ID3', 'IER2', 'IFRD1', 'IRF2BPL', 'IRS
+2', 'ITGA5', 'JDP2', 'JMJD6', 'JOSD1', 'JUNB', 'JUND', 'KIAA0355', 'KITLG', 'KLF10', 'KLF11', 'KLF2', 'KLF3', 'KLF4', 'KLF6',
+ 'KPNA2', 'LINGO4', 'LRRC8A', 'MAFA', 'MCAM', 'MED26', 'MEOX1', 'MSN', 'MTRNR2L8', 'MYADM', 'MYC', 'MYH9', 'MYOD1', 'NAB2', '
+NEDD9', 'NES', 'NFIL3', 'NR4A1', 'OSGIN1', 'OTUD1', 'PDE4B', 'PDGFB', 'PDK4', 'PFKFB2', 'PIK3R3', 'PIM1', 'PLAU', 'PLEKHO2', 
+'PLXNA2', 'PMP22', 'PPP1R27', 'PPP1R3E', 'PTGER4', 'PVRL2', 'PXDC1', 'PYCR1', 'RARA', 'RBM12B', 'RGS2', 'RND3', 'RNF122', 'RR
+AGC', 'S100A9', 'SDC4', 'SEPHS2', 'SERPINB9', 'SERPINH1', 'SERTAD1', 'SLC19A2', 'SLC20A1', 'SLC25A25', 'SLC7A5', 'SMAD7', 'SP
+RY4', 'STK38L', 'STX12', 'TAGLN', 'TBX3', 'TES', 'TGIF1', 'THBD', 'TINAGL1', 'TNFRSF10B', 'TNFRSF12A', 'TPM4', 'TSC22D2', 'TU
+BB2A', 'USP2', 'VAMP1', 'VASP', 'VEGFA', 'VGLL2', 'XIRP1', 'ZBTB10', 'ZCCHC2', 'ZFP36L1', 'ZYX']
+
+The current set operator is: AND
+
+OPE*OPO:UP values( 119  values): 
+['ABHD2', 'ABRA', 'ACTA2', 'ACTG1', 'ACTN1', 'ADAMTS1', 'ADAMTS9', 'ADRB2', 'AKAP12', 'ALG2', 'ANKRD1', 'ANKRD37', 'ANXA3', '
+APLN', 'APOLD1', 'ASB5', 'ATF3', 'B3GNT5', 'BHLHE40', 'C8ORF4', 'CCL2', 'CDKN1A', 'CDR2', 'CHORDC1', 'CHST3', 'CNN1', 'CORO1C
+', 'CREB5', 'CRY1', 'CSRNP1', 'CSRP1', 'CTGF', 'CX3CL1', 'CYR61', 'DDIT4', 'DLC1', 'DNAJA1', 'DYNLL1', 'EGR1', 'EMP1', 'ENAH'
+, 'ERRFI1', 'ETS2', 'EVA1C', 'FGF6', 'FLNB', 'FOS', 'FOSL2', 'GABARAPL1', 'GADD45B', 'GBP1', 'GDNF', 'GRASP', 'GZF1', 'HES1',
+ 'HK2', 'ID1', 'IFRD1', 'IRS2', 'ITGA5', 'JOSD1', 'JUNB', 'KITLG', 'KLF10', 'KLF3', 'KLF4', 'KLF6', 'LATS2', 'LDLR', 'LINGO4'
+, 'LRRC32', 'MEDAG', 'MEOX1', 'MYC', 'NEDD9', 'NES', 'NFIL3', 'NNMT', 'NR4A1', 'OTUD1', 'PCF11', 'PDE4B', 'PDGFA', 'PDK4', 'P
+IK3R3', 'PIM1', 'PLAU', 'PLEKHO2', 'PMP22', 'PXDC1', 'PYCR1', 'RND3', 'RNF122', 'S100A9', 'SDC4', 'SERPINH1', 'SKIL', 'SLC19A
+2', 'SLC20A1', 'SLC25A25', 'SMAD7', 'SOX18', 'STK38L', 'TAGLN', 'TBX3', 'TCEAL7', 'TES', 'TGFB2', 'THBD', 'TNFRSF12A', 'TPM4'
+, 'TSC22D2', 'VASP', 'VEGFA', 'VGLL2', 'XIRP1', 'ZBTB10', 'ZCCHC2', 'ZYX']
+
+The resultant vector values( 100  values): 
+['ABHD2', 'ABRA', 'ACTA2', 'ACTG1', 'ACTN1', 'ADAMTS1', 'ADAMTS9', 'ADRB2', 'AKAP12', 'ALG2', 'ANKRD1', 'ANKRD37', 'APLN', 'A
+POLD1', 'ATF3', 'B3GNT5', 'BHLHE40', 'C8ORF4', 'CCL2', 'CDKN1A', 'CDR2', 'CHORDC1', 'CHST3', 'CNN1', 'CORO1C', 'CREB5', 'CSRN
+P1', 'CSRP1', 'CTGF', 'CX3CL1', 'CYR61', 'DLC1', 'DNAJA1', 'DYNLL1', 'EGR1', 'EMP1', 'ERRFI1', 'ETS2', 'FGF6', 'FLNB', 'FOS',
+ 'FOSL2', 'GADD45B', 'GBP1', 'GDNF', 'GRASP', 'HES1', 'HK2', 'ID1', 'IFRD1', 'IRS2', 'ITGA5', 'JOSD1', 'JUNB', 'KITLG', 'KLF1
+0', 'KLF3', 'KLF4', 'KLF6', 'LINGO4', 'MEOX1', 'MYC', 'NEDD9', 'NES', 'NFIL3', 'NR4A1', 'OTUD1', 'PDE4B', 'PDK4', 'PIK3R3', '
+PIM1', 'PLAU', 'PLEKHO2', 'PMP22', 'PXDC1', 'PYCR1', 'RND3', 'RNF122', 'S100A9', 'SDC4', 'SERPINH1', 'SLC19A2', 'SLC20A1', 'S
+LC25A25', 'SMAD7', 'STK38L', 'TAGLN', 'TBX3', 'TES', 'THBD', 'TNFRSF12A', 'TPM4', 'TSC22D2', 'VASP', 'VEGFA', 'VGLL2', 'XIRP1
+', 'ZBTB10', 'ZCCHC2', 'ZYX']
+
+The result values( 100  values): 
+['ABHD2', 'ABRA', 'ACTA2', 'ACTG1', 'ACTN1', 'ADAMTS1', 'ADAMTS9', 'ADRB2', 'AKAP12', 'ALG2', 'ANKRD1', 'ANKRD37', 'APLN', 'A
+POLD1', 'ATF3', 'B3GNT5', 'BHLHE40', 'C8ORF4', 'CCL2', 'CDKN1A', 'CDR2', 'CHORDC1', 'CHST3', 'CNN1', 'CORO1C', 'CREB5', 'CSRN
+P1', 'CSRP1', 'CTGF', 'CX3CL1', 'CYR61', 'DLC1', 'DNAJA1', 'DYNLL1', 'EGR1', 'EMP1', 'ERRFI1', 'ETS2', 'FGF6', 'FLNB', 'FOS',
+ 'FOSL2', 'GADD45B', 'GBP1', 'GDNF', 'GRASP', 'HES1', 'HK2', 'ID1', 'IFRD1', 'IRS2', 'ITGA5', 'JOSD1', 'JUNB', 'KITLG', 'KLF1
+0', 'KLF3', 'KLF4', 'KLF6', 'LINGO4', 'MEOX1', 'MYC', 'NEDD9', 'NES', 'NFIL3', 'NR4A1', 'OTUD1', 'PDE4B', 'PDK4', 'PIK3R3', '
+PIM1', 'PLAU', 'PLEKHO2', 'PMP22', 'PXDC1', 'PYCR1', 'RND3', 'RNF122', 'S100A9', 'SDC4', 'SERPINH1', 'SLC19A2', 'SLC20A1', 'S
+LC25A25', 'SMAD7', 'STK38L', 'TAGLN', 'TBX3', 'TES', 'THBD', 'TNFRSF12A', 'TPM4', 'TSC22D2', 'VASP', 'VEGFA', 'VGLL2', 'XIRP1
+', 'ZBTB10', 'ZCCHC2', 'ZYX']
+
+The current query is: LPE*LPO:UP-AND-OPE*OPO:DOWN
+List of groups / paired comparisons to be examined:
+['OPE*OPO:DOWN', 'LPE*LPO:UP']
+Current subquery: 
+LPE*LPO:UP-AND-OPE*OPO:DOWN  =  $1
+The groups being compared are current vector values and OPE*OPO:DOWN.
+
+Current vector values( 174  values): 
+['ABHD2', 'ABRA', 'ACKR3', 'ACTA2', 'ACTG1', 'ACTN1', 'ACTN4', 'ADAMTS1', 'ADAMTS9', 'ADRB2', 'AKAP12', 'ALG2', 'ANKRD1', 'AN
+KRD37', 'APLN', 'APOLD1', 'ARRDC4', 'ATF3', 'ATP1B3', 'ATP8B1', 'B3GNT5', 'BCAR1', 'BCL6B', 'BHLHE40', 'BTG2', 'BTG3', 'C8ORF
+4', 'CASKIN2', 'CCL2', 'CDC42EP1', 'CDKN1A', 'CDR2', 'CHMP1B', 'CHORDC1', 'CHST3', 'CISH', 'CNN1', 'CORO1C', 'COTL1', 'CREB5'
+, 'CRISPLD2', 'CSRNP1', 'CSRP1', 'CTGF', 'CX3CL1', 'CXCL2', 'CYR61', 'DLC1', 'DNAJA1', 'DUSP16', 'DYNLL1', 'EDNRB', 'EGR1', '
+ELOVL5', 'EMP1', 'EMP3', 'ERRFI1', 'ETS2', 'FAM179A', 'FGF6', 'FKBP5', 'FLNA', 'FLNB', 'FOS', 'FOSL2', 'G0S2', 'GADD45B', 'GB
+P1', 'GDNF', 'GRASP', 'HBA2', 'HES1', 'HEY1', 'HEYL', 'HK2', 'HMOX1', 'HSPH1', 'ID1', 'ID3', 'IER2', 'IFRD1', 'IRF2BPL', 'IRS
+2', 'ITGA5', 'JDP2', 'JMJD6', 'JOSD1', 'JUNB', 'JUND', 'KIAA0355', 'KITLG', 'KLF10', 'KLF11', 'KLF2', 'KLF3', 'KLF4', 'KLF6',
+ 'KPNA2', 'LINGO4', 'LRRC8A', 'MAFA', 'MCAM', 'MED26', 'MEOX1', 'MSN', 'MTRNR2L8', 'MYADM', 'MYC', 'MYH9', 'MYOD1', 'NAB2', '
+NEDD9', 'NES', 'NFIL3', 'NR4A1', 'OSGIN1', 'OTUD1', 'PDE4B', 'PDGFB', 'PDK4', 'PFKFB2', 'PIK3R3', 'PIM1', 'PLAU', 'PLEKHO2', 
+'PLXNA2', 'PMP22', 'PPP1R27', 'PPP1R3E', 'PTGER4', 'PVRL2', 'PXDC1', 'PYCR1', 'RARA', 'RBM12B', 'RGS2', 'RND3', 'RNF122', 'RR
+AGC', 'S100A9', 'SDC4', 'SEPHS2', 'SERPINB9', 'SERPINH1', 'SERTAD1', 'SLC19A2', 'SLC20A1', 'SLC25A25', 'SLC7A5', 'SMAD7', 'SP
+RY4', 'STK38L', 'STX12', 'TAGLN', 'TBX3', 'TES', 'TGIF1', 'THBD', 'TINAGL1', 'TNFRSF10B', 'TNFRSF12A', 'TPM4', 'TSC22D2', 'TU
+BB2A', 'USP2', 'VAMP1', 'VASP', 'VEGFA', 'VGLL2', 'XIRP1', 'ZBTB10', 'ZCCHC2', 'ZFP36L1', 'ZYX']
+
+The current set operator is: AND
+
+OPE*OPO:DOWN values( 14  values): 
+['ACE', 'C1ORF162', 'CA4', 'DBP', 'GADD45G', 'GIMAP8', 'KY', 'MFNG', 'MGC72080', 'MOSPD3', 'NTHL1', 'PRSS46', 'PRSS50', 'REEP
+2']
+
+The resultant vector values( 0  values): 
+[]
+
+The result values( 0  values): 
+[]
+
+The current query is: LPE*LPO:DOWN-AND-OPE*OPO:UP
+List of groups / paired comparisons to be examined:
+['OPE*OPO:UP', 'LPE*LPO:DOWN']
+Current subquery: 
+LPE*LPO:DOWN-AND-OPE*OPO:UP  =  $1
+The groups being compared are current vector values and OPE*OPO:UP.
+
+Current vector values( 37  values): 
+['ACE', 'ACVR2B', 'ADH1C', 'AGTR1', 'APOL3', 'ARRDC2', 'BTN3A1', 'CA4', 'CD34', 'CDCA7L', 'CTXN3', 'GADD45G', 'GALNT15', 'GBP
+4', 'GIMAP6', 'GIMAP8', 'HDAC9', 'INMT', 'KY', 'LOC646736', 'MFNG', 'NFKBIA', 'PDP1', 'PER3', 'PIK3IP1', 'PRKCE', 'RAPGEF3', 
+'RBM43', 'REEP2', 'RERGL', 'SEC16B', 'SEMA6D', 'SLC12A2', 'SLC38A4', 'SOCS2', 'ST6GAL1', 'TNFSF10']
+
+The current set operator is: AND
+
+OPE*OPO:UP values( 119  values): 
+['ABHD2', 'ABRA', 'ACTA2', 'ACTG1', 'ACTN1', 'ADAMTS1', 'ADAMTS9', 'ADRB2', 'AKAP12', 'ALG2', 'ANKRD1', 'ANKRD37', 'ANXA3', '
+APLN', 'APOLD1', 'ASB5', 'ATF3', 'B3GNT5', 'BHLHE40', 'C8ORF4', 'CCL2', 'CDKN1A', 'CDR2', 'CHORDC1', 'CHST3', 'CNN1', 'CORO1C
+', 'CREB5', 'CRY1', 'CSRNP1', 'CSRP1', 'CTGF', 'CX3CL1', 'CYR61', 'DDIT4', 'DLC1', 'DNAJA1', 'DYNLL1', 'EGR1', 'EMP1', 'ENAH'
+, 'ERRFI1', 'ETS2', 'EVA1C', 'FGF6', 'FLNB', 'FOS', 'FOSL2', 'GABARAPL1', 'GADD45B', 'GBP1', 'GDNF', 'GRASP', 'GZF1', 'HES1',
+ 'HK2', 'ID1', 'IFRD1', 'IRS2', 'ITGA5', 'JOSD1', 'JUNB', 'KITLG', 'KLF10', 'KLF3', 'KLF4', 'KLF6', 'LATS2', 'LDLR', 'LINGO4'
+, 'LRRC32', 'MEDAG', 'MEOX1', 'MYC', 'NEDD9', 'NES', 'NFIL3', 'NNMT', 'NR4A1', 'OTUD1', 'PCF11', 'PDE4B', 'PDGFA', 'PDK4', 'P
+IK3R3', 'PIM1', 'PLAU', 'PLEKHO2', 'PMP22', 'PXDC1', 'PYCR1', 'RND3', 'RNF122', 'S100A9', 'SDC4', 'SERPINH1', 'SKIL', 'SLC19A
+2', 'SLC20A1', 'SLC25A25', 'SMAD7', 'SOX18', 'STK38L', 'TAGLN', 'TBX3', 'TCEAL7', 'TES', 'TGFB2', 'THBD', 'TNFRSF12A', 'TPM4'
+, 'TSC22D2', 'VASP', 'VEGFA', 'VGLL2', 'XIRP1', 'ZBTB10', 'ZCCHC2', 'ZYX']
+
+The resultant vector values( 0  values): 
+[]
+
+The result values( 0  values): 
+[]
+
+The current query is: LPE*LPO:DOWN-AND-OPE*OPO:DOWN
+List of groups / paired comparisons to be examined:
+['OPE*OPO:DOWN', 'LPE*LPO:DOWN']
+Current subquery: 
+LPE*LPO:DOWN-AND-OPE*OPO:DOWN  =  $1
+The groups being compared are current vector values and OPE*OPO:DOWN.
+
+Current vector values( 37  values): 
+['ACE', 'ACVR2B', 'ADH1C', 'AGTR1', 'APOL3', 'ARRDC2', 'BTN3A1', 'CA4', 'CD34', 'CDCA7L', 'CTXN3', 'GADD45G', 'GALNT15', 'GBP
+4', 'GIMAP6', 'GIMAP8', 'HDAC9', 'INMT', 'KY', 'LOC646736', 'MFNG', 'NFKBIA', 'PDP1', 'PER3', 'PIK3IP1', 'PRKCE', 'RAPGEF3', 
+'RBM43', 'REEP2', 'RERGL', 'SEC16B', 'SEMA6D', 'SLC12A2', 'SLC38A4', 'SOCS2', 'ST6GAL1', 'TNFSF10']
+
+The current set operator is: AND
+
+OPE*OPO:DOWN values( 14  values): 
+['ACE', 'C1ORF162', 'CA4', 'DBP', 'GADD45G', 'GIMAP8', 'KY', 'MFNG', 'MGC72080', 'MOSPD3', 'NTHL1', 'PRSS46', 'PRSS50', 'REEP
+2']
+
+The resultant vector values( 7  values): 
+['ACE', 'CA4', 'GADD45G', 'GIMAP8', 'KY', 'MFNG', 'REEP2']
+
+The result values( 7  values): 
+['ACE', 'CA4', 'GADD45G', 'GIMAP8', 'KY', 'MFNG', 'REEP2']
+

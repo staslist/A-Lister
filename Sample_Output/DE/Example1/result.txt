@@ -1,0 +1,7 @@
+Query: ZNF143_veh*ZNF143_E2-DIFF-Ctl_veh*Ctl_E2
+Number of values: (4)
+PEX11A
+RARA
+SIGLEC15
+SYBU
+
