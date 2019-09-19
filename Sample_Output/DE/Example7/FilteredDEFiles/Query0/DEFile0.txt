@@ -1,4 +1,4 @@
-File Path: E:/Programs/Eclipse_Workspace/A_Lister/Sample_Input/DE_Series/GSE126785_M2.txt
+File Path: E:/Data/Sample_Input/DE_Series/GSE126785_M2.txt
 Query:     M2Low*M2High-DIFF-(M5Low*M5High-OR-M4Low*M4High)
 
 Number of rows in DATA: (36)

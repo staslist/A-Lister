@@ -1,6 +1,6 @@
 
 USER INPUT (ECHO): 
-ALister.py diff-expression E:/Data/Sample_Input/DE_Sample/GSE108643_Cuffdiff.txt -pc LeanPre->LPE,LeanPost->LPO,OvobPre->OPE,OvobPost->OPO -dq (LPE*LPO-FAND-OPE*OPO)-DIFF-(LPE*LPO-AND-OPE*OPO) -id tab -o E:/Data/Sample_Output/DE/Example4/ -od comma-row -f log2(fold_change):agt1.2,q_value:lt0.05,value_1:gt1.0,value_2:gt1.0 -v -s1 sample_1 -s2 sample_2 -n gene 
+ALister_CLI.py diff-expression E:/Data/Sample_Input/DE_Sample/GSE108643_Cuffdiff.txt -pc LeanPre->LPE,LeanPost->LPO,OvobPre->OPE,OvobPost->OPO -dq (LPE*LPO-FAND-OPE*OPO)-DIFF-(LPE*LPO-AND-OPE*OPO) -id tab -o E:/Data/Sample_Output/DE/Example4/ -od comma-row -f log2(fold_change):agt1.2,q_value:lt0.05,value_1:gt1.0,value_2:gt1.0 -v -s1 sample_1 -s2 sample_2 -n gene 
 
 USER INPUT (CLI ARGS): 
 Namespace(comparison_type=['diff-expression'], dq=['(LPE*LPO-FAND-OPE*OPO)-DIFF-(LPE*LPO-AND-OPE*OPO)'], examples=None, f=['log2(fold_change):agt1.2,q_value:lt0.05,value_1:gt1.0,value_2:gt1.0'], fc=['log2(fold_change)'], id=['tab'], input_file=['E:/Data/Sample_Input/DE_Sample/GSE108643_Cuffdiff.txt'], n=['gene'], o=['E:/Data/Sample_Output/DE/Example4/'], od=['comma-row'], pc=['LeanPre->LPE,LeanPost->LPO,OvobPre->OPE,OvobPost->OPO'], s1=['sample_1'], s2=['sample_2'], v=1)

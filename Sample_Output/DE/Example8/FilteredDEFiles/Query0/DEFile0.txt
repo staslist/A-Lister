@@ -1,4 +1,4 @@
-File Path: E:/Programs/Eclipse_Workspace/A_Lister/Sample_Input/DE_Series/GSE114528_differential_exp_EVP_D.tsv
+File Path: E:/Data/Sample_Input/DE_Series/GSE114528_differential_exp_EVP_D.tsv
 Query:     EVP*D-AND-CPOS*CNEG
 
 Number of rows in DATA: (5)

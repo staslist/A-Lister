@@ -1,6 +1,6 @@
 
 USER INPUT (ECHO): 
-ALister.py name-list Set1-DIFF-(Control-OR-(Treated1-AND-Treated2)) E:/Data/Sample_Input/Name_List/fileA.txt E:/Data/Sample_Input/Name_List/names_comma.txt -id tab comma -o E:/Data/Sample_Output/Name_List/Example2/ -od comma-row -v 
+ALister_CLI.py name-list Set1-DIFF-(Control-OR-(Treated1-AND-Treated2)) E:/Data/Sample_Input/Name_List/fileA.txt E:/Data/Sample_Input/Name_List/names_comma.txt -id tab comma -o E:/Data/Sample_Output/Name_List/Example2/ -od comma-row -v 
 
 USER INPUT (CLI ARGS): 
 Namespace(comparison_type=['name-list'], examples=None, id=['tab', 'comma'], input_file=['E:/Data/Sample_Input/Name_List/fileA.txt', 'E:/Data/Sample_Input/Name_List/names_comma.txt'], o=['E:/Data/Sample_Output/Name_List/Example2/'], od=['comma-row'], query=['Set1-DIFF-(Control-OR-(Treated1-AND-Treated2))'], v=1)

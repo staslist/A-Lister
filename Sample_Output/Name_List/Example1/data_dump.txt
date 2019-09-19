@@ -1,6 +1,6 @@
 
 USER INPUT (ECHO): 
-ALister.py name-list Treated1-AND-Treated2 E:/Data/Sample_Input/Name_List/names_comma.txt -id comma -o E:/Data/Sample_Output/Name_List/Example1/ -od tab -v 
+ALister_CLI.py name-list Treated1-AND-Treated2 E:/Data/Sample_Input/Name_List/names_comma.txt -id comma -o E:/Data/Sample_Output/Name_List/Example1/ -od tab -v 
 
 USER INPUT (CLI ARGS): 
 Namespace(comparison_type=['name-list'], examples=None, id=['comma'], input_file=['E:/Data/Sample_Input/Name_List/names_comma.txt'], o=['E:/Data/Sample_Output/Name_List/Example1/'], od=['tab'], query=['Treated1-AND-Treated2'], v=1)

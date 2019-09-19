@@ -1,6 +1,6 @@
 
 USER INPUT (ECHO): 
-ALister.py diff-expression E:/Data/Sample_Input/DE_Series/GSE126785_M2M4M5.csv -pc M2Low*M2High->log2(FC)M2,P-valueM2,P-adjM2;M4Low*M4High->log2(FC)M4,P-valueM4,P-adjM4;M5Low*M5High->log2(FC)M5,P-valueM5,P-adjM5 -dq M2Low*M2High:ALL-AND-M4Low*M4High:ALL-AND-M5Low*M5High:ALL -o E:/Data/Sample_Output/DE/Example5/ -f P-valueM2:lt0.05,P-valueM4:lt0.05,P-valueM5:lt0.05,log2(FC)M2:agt0.8,log2(FC)M4:agt0.8,log2(FC)M5:agt0.8 -fc log2(FC)M2,log2(FC)M4,log2(FC)M5 -n GeneID -id comma -v 
+ALister_CLI.py diff-expression E:/Data/Sample_Input/DE_Series/GSE126785_M2M4M5.csv -pc M2Low*M2High->log2(FC)M2,P-valueM2,P-adjM2;M4Low*M4High->log2(FC)M4,P-valueM4,P-adjM4;M5Low*M5High->log2(FC)M5,P-valueM5,P-adjM5 -dq M2Low*M2High:ALL-AND-M4Low*M4High:ALL-AND-M5Low*M5High:ALL -o E:/Data/Sample_Output/DE/Example5/ -f P-valueM2:lt0.05,P-valueM4:lt0.05,P-valueM5:lt0.05,log2(FC)M2:agt0.8,log2(FC)M4:agt0.8,log2(FC)M5:agt0.8 -fc log2(FC)M2,log2(FC)M4,log2(FC)M5 -n GeneID -id comma -v 
 
 USER INPUT (CLI ARGS): 
 Namespace(comparison_type=['diff-expression'], dq=['M2Low*M2High:ALL-AND-M4Low*M4High:ALL-AND-M5Low*M5High:ALL'], examples=None, f=['P-valueM2:lt0.05,P-valueM4:lt0.05,P-valueM5:lt0.05,log2(FC)M2:agt0.8,log2(FC)M4:agt0.8,log2(FC)M5:agt0.8'], fc=['log2(FC)M2,log2(FC)M4,log2(FC)M5'], id=['comma'], input_file=['E:/Data/Sample_Input/DE_Series/GSE126785_M2M4M5.csv'], n=['GeneID'], o=['E:/Data/Sample_Output/DE/Example5/'], od=['tab'], pc=['M2Low*M2High->log2(FC)M2,P-valueM2,P-adjM2;M4Low*M4High->log2(FC)M4,P-valueM4,P-adjM4;M5Low*M5High->log2(FC)M5,P-valueM5,P-adjM5'], s1=['NONE'], s2=['NONE'], v=1)
@@ -22,7 +22,7 @@ Filter by column cutoffs: ['lt0.05', 'lt0.05', 'lt0.05', 'agt0.8', 'agt0.8', 'ag
 
 The current query is: M2Low*M2High:UP-AND-M4Low*M4High:UP-AND-M5Low*M5High:UP
 List of groups / paired comparisons to be examined:
-['M2Low*M2High:UP', 'M5Low*M5High:UP', 'M4Low*M4High:UP']
+['M4Low*M4High:UP', 'M5Low*M5High:UP', 'M2Low*M2High:UP']
 Current subquery: 
 M2Low*M2High:UP-AND-M4Low*M4High:UP-AND-M5Low*M5High:UP  =  $1
 The groups being compared are current vector values and M4Low*M4High:UP.
@@ -78,7 +78,7 @@ The result values( 5  values):
 
 The current query is: M2Low*M2High:UP-AND-M4Low*M4High:UP-AND-M5Low*M5High:DOWN
 List of groups / paired comparisons to be examined:
-['M2Low*M2High:UP', 'M4Low*M4High:UP', 'M5Low*M5High:DOWN']
+['M4Low*M4High:UP', 'M5Low*M5High:DOWN', 'M2Low*M2High:UP']
 Current subquery: 
 M2Low*M2High:UP-AND-M4Low*M4High:UP-AND-M5Low*M5High:DOWN  =  $1
 The groups being compared are current vector values and M4Low*M4High:UP.
@@ -134,7 +134,7 @@ The result values( 0  values):
 
 The current query is: M2Low*M2High:UP-AND-M4Low*M4High:DOWN-AND-M5Low*M5High:UP
 List of groups / paired comparisons to be examined:
-['M2Low*M2High:UP', 'M5Low*M5High:UP', 'M4Low*M4High:DOWN']
+['M4Low*M4High:DOWN', 'M5Low*M5High:UP', 'M2Low*M2High:UP']
 Current subquery: 
 M2Low*M2High:UP-AND-M4Low*M4High:DOWN-AND-M5Low*M5High:UP  =  $1
 The groups being compared are current vector values and M4Low*M4High:DOWN.
@@ -191,7 +191,7 @@ The result values( 0  values):
 
 The current query is: M2Low*M2High:UP-AND-M4Low*M4High:DOWN-AND-M5Low*M5High:DOWN
 List of groups / paired comparisons to be examined:
-['M2Low*M2High:UP', 'M4Low*M4High:DOWN', 'M5Low*M5High:DOWN']
+['M4Low*M4High:DOWN', 'M5Low*M5High:DOWN', 'M2Low*M2High:UP']
 Current subquery: 
 M2Low*M2High:UP-AND-M4Low*M4High:DOWN-AND-M5Low*M5High:DOWN  =  $1
 The groups being compared are current vector values and M4Low*M4High:DOWN.
@@ -248,7 +248,7 @@ The result values( 1  values):
 
 The current query is: M2Low*M2High:DOWN-AND-M4Low*M4High:UP-AND-M5Low*M5High:UP
 List of groups / paired comparisons to be examined:
-['M2Low*M2High:DOWN', 'M5Low*M5High:UP', 'M4Low*M4High:UP']
+['M4Low*M4High:UP', 'M2Low*M2High:DOWN', 'M5Low*M5High:UP']
 Current subquery: 
 M2Low*M2High:DOWN-AND-M4Low*M4High:UP-AND-M5Low*M5High:UP  =  $1
 The groups being compared are current vector values and M4Low*M4High:UP.
@@ -289,7 +289,7 @@ The result values( 0  values):
 
 The current query is: M2Low*M2High:DOWN-AND-M4Low*M4High:UP-AND-M5Low*M5High:DOWN
 List of groups / paired comparisons to be examined:
-['M2Low*M2High:DOWN', 'M4Low*M4High:UP', 'M5Low*M5High:DOWN']
+['M4Low*M4High:UP', 'M2Low*M2High:DOWN', 'M5Low*M5High:DOWN']
 Current subquery: 
 M2Low*M2High:DOWN-AND-M4Low*M4High:UP-AND-M5Low*M5High:DOWN  =  $1
 The groups being compared are current vector values and M4Low*M4High:UP.
@@ -330,7 +330,7 @@ The result values( 0  values):
 
 The current query is: M2Low*M2High:DOWN-AND-M4Low*M4High:DOWN-AND-M5Low*M5High:UP
 List of groups / paired comparisons to be examined:
-['M2Low*M2High:DOWN', 'M5Low*M5High:UP', 'M4Low*M4High:DOWN']
+['M2Low*M2High:DOWN', 'M4Low*M4High:DOWN', 'M5Low*M5High:UP']
 Current subquery: 
 M2Low*M2High:DOWN-AND-M4Low*M4High:DOWN-AND-M5Low*M5High:UP  =  $1
 The groups being compared are current vector values and M4Low*M4High:DOWN.

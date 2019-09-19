@@ -1,4 +1,4 @@
-File Path: E:/Programs/Eclipse_Workspace/A_Lister/Sample_Input/DE_Sample/GSE76453_cuffdiff_E2.diff
+File Path: E:/Data/Sample_Input/DE_Sample/GSE76453_cuffdiff_E2.diff
 Query:     Ctl*ZNF143:UP
 
 Number of rows in Ctl*ZNF143: (32)
