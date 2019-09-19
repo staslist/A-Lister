@@ -32,17 +32,19 @@ from pathlib import Path
 class Logger(object):
     def __init__(self, output_directory:str):
         self.terminal = sys.stdout
-        # Create the output directory. 
         os.makedirs(Path(output_directory), exist_ok=True)
         self.log = open(Path(output_directory)/"data_dump.txt", "w")
         
-    #def __del__(self):
-    #    x = self.log._handlers.copy()
-    #    for i in x:
-    #        self.log.removeHandler(i)
-    #        i.flush()
-    #        i.close()
-
+    def __del__(self):
+        #print("The logger deconstructor has been called!")
+        # Currently stdout points to the logger.
+        # Undo this by pointing stdout back to terminal.
+        sys.stdout = self.terminal
+        
+    def manualDel(self):
+        #print("Logger reset stdout to point to terminal.")
+        sys.stdout = self.terminal
+    
     def write(self, message):
         self.terminal.write(message)
         self.log.write(message)

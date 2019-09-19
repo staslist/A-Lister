@@ -461,46 +461,42 @@ def Read_Filter_DE_Series_File(filename: str, pc_map:dict, delimiter:str,
         file_data['ID-COLUMN'] = id_col
         file_data['DELIM'] = delimiter
         file_data['DATA-TYPE'] = 'DE-Series'
+        file_data['DATA'] = []
         
         for row in iter_rows:
             filter_pass_row = Filter_Row_Alt(row, filt_map['ALL'])
             row[id_col] = row[id_col].upper()
             i = 0
-            if(filter_pass_row):
-                for key,values in pc_map.items():
-                    try:
-                        float(values[0])
-                    except ValueError:
-                        continue
-                    
-                    filter_pass_pc = Filter_Row_Alt(row, filt_map[key])
-                    if(not filter_pass_pc):
-                        continue
-                    
-                    group_comparison_name = key
+            for key,values in pc_map.items():
+                try:
+                    float(values[0])
+                except ValueError:
+                    continue
+                
+                filter_pass_pc = Filter_Row_Alt(row, filt_map[key])
+                if(not filter_pass_pc):
+                    continue
+                
+                group_comparison_name = key
+                try:
+                    input_data[group_comparison_name]
+                except KeyError:
+                    input_data[group_comparison_name] = []
+                
+                if(filter_pass_row):
                     subresult.append(row[id_col])
                     subresult.append(row[values[0]])
-                    try:
-                        input_data[group_comparison_name].append(subresult)
-                    except KeyError:
-                        input_data[group_comparison_name] = []
-                        input_data[group_comparison_name].append(subresult)
+                    
+                    input_data[group_comparison_name].append(subresult)
                     subresult = []
                     i = i + 1
-                
-                if(i > 0):  
-                    # Only write this row if data from it was written into at least one 
-                    # pairwise comparison. 
-                    subresult2 = row
-                    try:
-                        file_data['DATA'].append(subresult2)
-                    except KeyError:
-                        file_data['DATA'] = []
-                        file_data['DATA'].append(subresult2)
-                    subresult2 = []
-        if(len(input_data) == 0):
-            raise ValueError("Error. The file: " + str(filename) +
-                             " is either empty or all the rows have been filtered out.")
+            
+            if(i > 0):  
+                # Only write this row if data from it was written into at least one 
+                # pairwise comparison. 
+                subresult2 = row
+                file_data['DATA'].append(subresult2)
+                subresult2 = []
                 
     return input_data, file_data
 
@@ -546,48 +542,46 @@ def Read_Filter_DE_Sample_File(filename: str, sample_label_map:dict, delimiter:s
         file_data['DATA-TYPE'] = 'DE-Sample'
         i = 0
         for row in iter_rows:
+            i = i + 1
             
             try:
                 float(row[fc_col])
             except ValueError:
                 continue
             
+            try:
+                group_comparison_name = sample_label_map[row[sample1_col]] + '*' + sample_label_map[row[sample2_col]]
+            except KeyError:
+                print("Filename: " + str(filename))
+                print("Warning. The value listed in the sample column is not listed in the sample mapping.")
+                print("Row #" + str(i) + '; Sample column1 value: ' + str(row[sample1_col]) 
+                      + '; Sample column2 value: ' + str(row[sample2_col]))
+                print("This row will be ignored and will not be read in.")
+                print()
+                continue
+            
+            try:
+                input_data[group_comparison_name]
+            except KeyError:
+                input_data[group_comparison_name] = []
+                
+            try:
+                file_data[group_comparison_name]
+            except KeyError:
+                file_data[group_comparison_name] = []
+            
             filter_pass = Filter_Row(row, filter_by_col_nums,
                                                filter_by_col_cutoffs)
             row[id_col] = row[id_col].upper()
             if(filter_pass):
-                i = i + 1
-                try:
-                    group_comparison_name = sample_label_map[row[sample1_col]] + '*' + sample_label_map[row[sample2_col]]
-                except KeyError:
-                    print("Filename: " + str(filename))
-                    print("Warning. The value listed in the sample column is not listed in the sample mapping.")
-                    print("Row #" + str(i) + '; Sample column1 value: ' + str(row[sample1_col]) 
-                          + '; Sample column2 value: ' + str(row[sample2_col]))
-                    print("This row will be ignored and will not be read in.")
-                    print()
-                    continue
-            
                 subresult.append(row[id_col])
                 subresult.append(row[fc_col])
-                try:
-                    input_data[group_comparison_name].append(subresult)
-                except KeyError:
-                    input_data[group_comparison_name] = []
-                    input_data[group_comparison_name].append(subresult)
+                input_data[group_comparison_name].append(subresult)
                 subresult = []
                 
                 subresult2 = row
-                try:
-                    file_data[group_comparison_name].append(subresult2)
-                except KeyError:
-                    file_data[group_comparison_name] = []
-                    file_data[group_comparison_name].append(subresult2)
+                file_data[group_comparison_name].append(subresult2)
                 subresult2 = []
-    if(len(input_data) == 0):
-        raise ValueError("Error. The file: " + str(filename) +
-                         " is either empty or all the rows have been filtered out.")
-    
     return input_data, file_data
 
 

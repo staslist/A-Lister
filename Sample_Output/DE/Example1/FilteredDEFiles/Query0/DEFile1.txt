@@ -1,4 +1,4 @@
-File Path: E:/Data/Sample_Input/DE_Sample/GSE76453_cuffdiff_siZNF143.diff
+File Path: E:/Programs/Eclipse_Workspace/A_Lister/Sample_Input/DE_Sample/GSE76453_cuffdiff_siZNF143.diff
 Query:     ZNF143_veh*ZNF143_E2-DIFF-Ctl_veh*Ctl_E2
 
 Number of rows in ZNF143_veh*ZNF143_E2: (4)

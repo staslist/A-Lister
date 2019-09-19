@@ -1,4 +1,4 @@
-File Path: E:/Data/Sample_Input/DE_Sample/GSE99397_CreNeg-MHCPos_vs_CrePos-MHCNeg.diff
+File Path: E:/Programs/Eclipse_Workspace/A_Lister/Sample_Input/DE_Sample/GSE99397_CreNeg-MHCPos_vs_CrePos-MHCNeg.diff
 Query:     EVP*D-AND-CPOS*CNEG
 
 Number of rows in CPOS*CNEG: (5)

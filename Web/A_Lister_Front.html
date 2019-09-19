@@ -1,0 +1,1729 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+	<meta charset="UTF-8">
+	<title>A-Lister: bioinformatics software for comparison of differentially expressed entities such as genes, proteins, and methylation markers 
+	(DEGs, DEPs, DMPs/DMRs).</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="w3.css">
+	
+	<script>
+	<!-- Styling Guide: -->
+	<!-- Java Script Variables and Functions: variableName -->
+		<!-- Indicate belonging to DE or NL mode at the end of the variable: variableNameDE -->
+	<!-- HTML IDs: Id_Name -->
+		<!-- Indicate beloning to a DE or NL mode at the beginning of the id name: DE_Id_Name -->
+	<!-- HTML Class: class-name -->
+	
+	
+	var tabCounterDE = 0;
+	var tabCounterNL = 0;
+	var tabCounterPC = [];
+	var addColumnCounter = 0;
+	var defaultIDColumn = "";
+	var defeaultFCColumn = "";
+	var defaultSample1Column = "sample_1";
+	var defaultSample2Column = "sample_2";
+	
+	<!-- Generic helper functions -->
+	
+	function w3_open(x) {
+	  document.getElementById(x).style.display = "block";
+	}
+
+	function w3_close(x) {
+	  document.getElementById(x).style.display = "none";
+	}
+	
+	function convertValue(array1, array2, value){
+		// Array1 maps to Array2. Array1 and Array2 are the same length.
+		// Value is mapped using Array1 to Array2 mapping.
+		var toReturn;
+		if(array1.length != array2.length){
+			toReturn = null;
+		}else{
+			if(array1.indexOf(value) != -1){
+				toReturn = array2[array1.indexOf(value)];
+			}
+			else{
+				toReturn = value;
+			}
+			
+		}
+		return toReturn;
+		
+	}
+	
+	function mapOperatorsToString(operator){
+		if(operator == "<"){
+			return "lt";
+		}
+		else if(operator == "<="){
+			return "le";
+		}
+		else if(operator == ">"){
+			return "gt";
+		}
+		else if(operator == ">="){
+			return "ge";
+		}
+		else if(operator == "=="){
+			return "eq";
+		}
+		else if(operator == "!="){
+			return "ne";
+		}
+		else if(operator == "abs<"){
+			return "alt";
+		}
+		else if(operator == "abs<="){
+			return "ale";
+		}
+		else if(operator == "abs>"){
+			return "agt";
+		}
+		else if(operator == "abs>="){
+			return "age";
+		}
+		else if(operator == "abs=="){
+			return "aeq";
+		}
+		else if(operator == "abs!="){
+			return "ane";
+		}
+		else{
+			return operator;
+		}
+	}
+	
+	function removeLastCharacter(x){
+		// This function returns a string without the last character.
+		// If the string is shorter than one character (empty or null) 
+		// return the original string unchanged.
+		if(x.length > 0){
+			x = x.substring(0, x.length - 1);
+		}
+		return x;
+	}
+	
+	function findMatchingStringInArray(string_array, pattern){
+		// This function is meant to return the first string in the array that matches 
+		// the pattern.
+		var x;
+		for (x of string_array){
+			result = x.search(pattern);
+			if(result != -1){
+				return x;
+			}
+		}
+		return "";
+	
+	}
+	
+	function createSelectorForm(options, defaultSetting = null){
+		
+		var form = document.createElement("form");
+		form.className = "w3-container";
+		var select = document.createElement("select");
+		select.className = "w3-select w3-border";
+		
+		if(defaultSetting != null){
+			var optionZero = document.createElement("option");
+			optionZero.disabled = true;
+			optionZero.selected = true;
+			optionZero.value = "";
+			optionZero.innerHTML = defaultSetting;
+			select.appendChild(optionZero);
+		}
+		
+		for (option of options){
+			var optionX = document.createElement("option");
+			optionX.innerHTML = option;
+			optionX.value = option;
+			select.appendChild(optionX);
+		}
+		form.appendChild(select);
+		
+		return form
+	
+	}
+	
+	<!-- Project Specific Helper Functions -->
+	
+	function findIdColumn(headerRow){
+		var pattern = /_id|gene|protein|marker/i;
+		return findMatchingStringInArray(headerRow, pattern);
+	}
+	
+	function findFCColumn(headerRow){
+		var pattern = /log2.FC|logFC|log2FC|fold|change/i;
+		return findMatchingStringInArray(headerRow, pattern);
+	}
+	
+	function confirmColumnNameValidity(headerRow, columnNameInBoxId){
+		columnName = document.getElementById(columnNameInBoxId).value;
+		if(headerRow.includes(columnName)){
+			document.getElementById(columnNameInBoxId).style.color = "green";
+			return true;
+		}else{
+			document.getElementById(columnNameInBoxId).style.color = "red";
+			return false;
+		}
+	}
+	
+	function checkAllColumnNames(headerRow, columnNameId, columnNameFC, columnNameSample1, columnNameSample2){
+		idColStatus = confirmColumnNameValidity(headerRow, columnNameId);
+		fcColStatus = confirmColumnNameValidity(headerRow, columnNameFC);
+		sample1ColStatus = confirmColumnNameValidity(headerRow, columnNameSample1);
+		sample2ColStatus = confirmColumnNameValidity(headerRow, columnNameSample2);
+		return (idColStatus && fcColStatus && sample1ColStatus && sample2ColStatus)
+	}
+	
+	function displaySampleLabelsHelperDE(sampleLabels, fileNum){
+		var sampleMapSpace = document.getElementById("PC_Sample_Space" + fileNum);
+		
+		// Remove any previously generated mappings.
+		while (sampleMapSpace.firstChild) {
+			sampleMapSpace.removeChild(sampleMapSpace.firstChild);
+		}
+		
+		// Put in the new mappings.
+		var x;
+		for (x of sampleLabels){
+			var labelMapDiv = document.createElement("div");
+			labelMapDiv.className = "w3-container";
+			var label = document.createElement("p");
+			label.innerHTML = x + "->";
+			label.style.display = "inline";
+			label.className = "DE-sample-label";
+			var inputMappedLabel = document.createElement("input");
+			inputMappedLabel.style.display = "inline";
+			inputMappedLabel.style.margin = "1%";
+			inputMappedLabel.style.width = "75%";
+			inputMappedLabel.className = "DE-sample-new-label w3-input";
+			labelMapDiv.appendChild(label);
+			labelMapDiv.appendChild(inputMappedLabel);
+			sampleMapSpace.appendChild(labelMapDiv);
+		}
+		
+		// Display the mappings if they are not displayed already. 
+		sampleMapSpace.style.display = "block";
+	}
+	
+	async function displaySampleLabelsDE(filepath, inputDelimiter, sample1Column, sample2Column, fileNum){
+		let sampleLabels = await eel.readDESampleLabels(filepath, inputDelimiter, sample1Column, sample2Column)();
+		displaySampleLabelsHelperDE(sampleLabels, fileNum);
+	}
+	
+	<!-- File tab related functions -->
+	
+	function addFilter(fileNum, headerRow){
+		var filterSpace = document.getElementById("Filter_Space" + fileNum);
+		var filter = document.createElement("div");
+		filter.className = "w3-container";
+		
+		var selectionForm = createSelectorForm(headerRow);
+		selectionForm.style.display = "inline";
+		selectionForm.firstChild.style.width = "35%";
+		selectionForm.className = "filter-value";
+		var colon = document.createElement("p");
+		colon.innerHTML = ":";
+		colon.style.display = "inline";
+		colon.className = "filter-text";
+		var operators = ["<", "<=", ">", ">=", "==", "!=", "abs<", "abs<=", "abs>", "abs>=", "abs==", "abs!="];
+		var selectionForm2 = createSelectorForm(operators);
+		selectionForm2.style.display = "inline";
+		selectionForm2.firstChild.style.width = "25%";
+		selectionForm2.className = "filter-value";
+		var cutoff = document.createElement("p");
+		cutoff.innerHTML = "Cutoff:";
+		cutoff.style.display = "inline";
+		var inbox = document.createElement("input");
+		inbox.type = "number";
+		inbox.style.display = "inline";
+		inbox.style.width = "25%";
+		inbox.className = "filter-value w3-input w3-border";
+		
+		filter.appendChild(selectionForm);
+		filter.appendChild(colon);
+		filter.appendChild(selectionForm2);
+		filter.appendChild(cutoff);
+		filter.appendChild(inbox);
+		
+		filterSpace.appendChild(filter);
+	}
+	
+	function removeFilter(fileNum){
+		var filterSpace = document.getElementById("Filter_Space" + fileNum);
+		filterSpace.removeChild(filterSpace.lastElementChild);
+	}
+	
+	function resetFilters(fileNum){
+		var filterSpace = document.getElementById("Filter_Space" + fileNum);
+		while(filterSpace.firstChild){
+			filterSpace.removeChild(filterSpace.firstChild);
+		}
+	}
+	
+	function openPCMapTab(currentPCMap, fileNum){
+		var i;
+		var className = "pc-map-tab-body" + fileNum;
+		var x = document.getElementsByClassName(className);
+		for (i = 0; i < x.length; i++) {
+			x[i].style.display = "none";  
+		}
+		document.getElementById(currentPCMap + "_Body").style.display = "block";  
+		
+		var j;
+		var className2 = "pc-map-tab-bar";
+		var x = document.getElementsByClassName(className2);
+		for (j = 0; j < x.length; j++) {
+			x[j].style.backgroundColor = "black";  
+		}
+		
+		document.getElementById(currentPCMap + "_Tab").style.backgroundColor = "grey";
+	}
+	
+	function openFileTab(currentFile, mode) {
+		var i;
+		var className = mode + "-file-tab-body";
+		var x = document.getElementsByClassName(className);
+		for (i = 0; i < x.length; i++) {
+			x[i].style.display = "none";  
+		}
+		document.getElementById(mode + "_" + currentFile).style.display = "block"; 
+		
+		var j;
+		var className2 = mode + "-file-tab-bar";
+		var x = document.getElementsByClassName(className2);
+		for (j = 0; j < x.length; j++) {
+			x[j].style.backgroundColor = "teal";  
+		}
+		
+		document.getElementById(mode + "_" + currentFile + "_Tab").style.backgroundColor = "grey";
+	}
+	
+	function removeMapFromTabPC(fileNum){
+		var currentPCMap = "PCMap" + "_" + fileNum + "_" + tabCounterPC[fileNum];
+		
+		// Remove file from tabs bar.
+		var child = document.getElementById(currentPCMap + "_Tab");
+		document.getElementById("PC_Series_Map_Bar" + fileNum).removeChild(child);
+		
+		// Remove file from tabs body.
+		var child = document.getElementById(currentPCMap + "_Body");
+		document.getElementById("PC_Series_Map_Body" + fileNum).removeChild(child);
+		
+		tabCounterPC[fileNum] = tabCounterPC[fileNum] - 1;
+		
+		if(tabCounterPC[fileNum] == 0){
+			document.getElementById("PC_Series_Map_Body" + fileNum).style.display = "none";
+		}
+	}
+	
+	function removeFileFromTabDE(){
+		var currentFile = "DE_File" + tabCounterDE;
+		
+		// Remove file from tabs bar.
+		var child = document.getElementById(currentFile + "_Tab");
+		document.getElementById("DE_Tabs_Bar").removeChild(child);
+		
+		// Remove file from tabs body.
+		var child = (document.getElementById(currentFile));
+		document.getElementById("DE_Tabs_Body").removeChild(child);
+		
+		tabCounterDE = tabCounterDE - 1;
+		
+		if(tabCounterDE == 0){
+			document.getElementById("DE_Tabs_Body").style.display = "none";
+		}
+	}
+	
+	function removeFileFromTabNL(){
+		currentFile = "NL_File" + tabCounterNL;
+		
+		// Remove file from tabs bar.
+		var child = document.getElementById(currentFile + "_Tab");
+		document.getElementById("NL_Tabs_Bar").removeChild(child);
+		
+		// Remove file from tabs body.
+		var child = (document.getElementById(currentFile));
+		document.getElementById("NL_Tabs_Body").removeChild(child);
+		
+		tabCounterNL = tabCounterNL - 1;
+		
+		if(tabCounterNL == 0){
+			document.getElementById("NL_Tabs_Body").style.display = "none";
+		}
+	
+	}
+	
+	function resetMapTabPC(fileNum){
+		tabCounterPC[fileNum] = 0;
+	
+		var tabs_bar = document.getElementById("PC_Series_Map_Bar" + fileNum);
+		while (tabs_bar.firstChild) {
+			tabs_bar.removeChild(tabs_bar.firstChild);
+		}
+
+		var tabs_body = document.getElementById("PC_Series_Map_Body" + fileNum);
+		while (tabs_body.firstChild) {
+			tabs_body.removeChild(tabs_body.firstChild);
+		}
+		
+		document.getElementById("PC_Series_Map_Body" + fileNum).style.display = "none";
+	}
+	
+	function resetFileTab(mode){
+		tabCounterPC = [];
+	
+		if(mode == "NL"){
+			tabCounterNL = 0;
+		}
+		else if(mode == "DE"){
+			tabCounterDE = 0;
+		}
+	
+		var tabs_bar = document.getElementById(mode + "_Tabs_Bar");
+		while (tabs_bar.firstChild) {
+			tabs_bar.removeChild(tabs_bar.firstChild);
+		}
+
+		var tabs_body = document.getElementById(mode + "_Tabs_Body");
+		while (tabs_body.firstChild) {
+			tabs_body.removeChild(tabs_body.firstChild);
+		}
+		
+		document.getElementById(mode + "_Tabs_Body").style.display = "none";
+	}
+	
+	function selectFileOptionsDE(fileNum){
+		
+		var FileTypeDE = document.getElementById("DE_File_Type_Select" + fileNum).value;
+		document.getElementById("Common_File_Options" + fileNum).style.display = "block";
+		
+		if(FileTypeDE == "DE-Sample"){
+			// Display sample1 and sample2 boxes. Display the default values.
+			document.getElementById("Sample1_Column" + fileNum).value  = defaultSample1Column;
+			document.getElementById("Sample2_Column" + fileNum).value  = defaultSample2Column;
+			document.getElementById("DE_Sample_File_Options" + fileNum).style.display = "block";
+			document.getElementById("DE_Series_File_Options" + fileNum).style.display = "none";
+		}
+		else if(FileTypeDE == "DE-Series"){
+			// Hide sample1 and sample2 boxes. And change their value to NONE.
+			document.getElementById("DE_Sample_File_Options" + fileNum).style.display = "none";
+			document.getElementById("Sample1_Column" + fileNum).value  = "NONE";
+			document.getElementById("Sample2_Column" + fileNum).value  = "NONE";
+			document.getElementById("DE_Series_File_Options" + fileNum).style.display = "block";
+		}
+		
+		document.getElementById("Common_File_Options2" + fileNum).style.display = "block";
+	}
+	
+	function addPCMapTabDESeries(headerRow, fileNum){
+		var PCSeriesMapBar = document.getElementById("PC_Series_Map_Bar" + fileNum);
+		
+		// UPDATE THE TABS BAR.
+		if(isNaN(tabCounterPC[fileNum]) || tabCounterPC[fileNum] == null){
+			tabCounterPC[fileNum] = 0;
+		}
+		tabCounterPC[fileNum] = tabCounterPC[fileNum] + 1;
+		var btn = document.createElement("BUTTON");
+		var currentPCMap = "PCMap" + "_" + fileNum + "_" + tabCounterPC[fileNum];
+		btn.id = currentPCMap + "_Tab"
+		btn.innerHTML = "Map" + tabCounterPC[fileNum];
+		btn.className = "w3-bar-item w3-button pc-map-tab-bar";
+		btn.style.backgroundColor = "black";
+		btn.style.color = "white";
+		btn.onclick = function() {
+			openPCMapTab(currentPCMap, fileNum);
+		}
+		PCSeriesMapBar.appendChild(btn);
+		
+		// UPDATE THE TABS BODY.
+		var PCMapBody = document.getElementById("PC_Series_Map_Body" + fileNum);
+		var MapBody = document.createElement("div");
+		MapBody.style.display = "none";
+		MapBody.className = "pc-map-tab-body" + fileNum +" w3-container";
+		MapBody.id = currentPCMap + "_Body";
+		
+		var PCName = document.createElement("p");
+		PCName.innerHTML = "PC Name" + tabCounterPC[fileNum] + ":";
+		PCName.style.display = "inline";
+		var corFCColumn = document.createElement("p");
+		corFCColumn.innerHTML = "FC Column:";
+		corFCColumn.style.display = "inline";
+		var addColumns = document.createElement("p");
+		addColumns.innerHTML = "Additional Columns:";
+		addColumns.style.display = "block";
+		
+		var PCNameDiv = document.createElement("div");
+		PCNameDiv.className = "w3-container w3-margin-bottom";
+		var label1 = document.createElement("input");
+		label1.style.display = "inline";
+		label1.style.width = "35%";
+		label1.className = "DE-series-map-value-one w3-input";
+		var star = document.createElement("p");
+		star.innerHTML = "*";
+		star.style.display = "inline";
+		star.className = "DE-series-map-text";
+		var label2 = document.createElement("input");
+		label2.className = "DE-series-map-value-two w3-input";
+		label2.style.width = "35%"
+		label2.style.display = "inline";
+		
+		var corFCColumnDiv = document.createElement("div");
+		corFCColumnDiv.className = "w3-container w3-margin-bottom";
+		
+		var corFCColumnForm = createSelectorForm(headerRow);
+		var corFCColumnSelect = corFCColumnForm.firstChild;
+		corFCColumnSelect.id = "Cor_FC_Column" + fileNum;
+		corFCColumnSelect.style.display = "inline";
+		corFCColumnSelect.style.width = "50%";
+		corFCColumnSelect.className += " DE-series-map-fc";
+		
+		var addColumnsDiv = document.createElement("div");
+		addColumnsDiv.className = "w3-container w3-margin-bottom";
+		
+		var addButton = document.createElement("button");
+		addButton.className = "w3-button w3-border";
+		addButton.innerHTML = "Add";
+		addButton.onclick = function(){
+			var corAddColumnForm = createSelectorForm(headerRow);
+			var corAddColumnSelect = corAddColumnForm.firstChild;
+			corAddColumnSelect.style.width = "50%";
+			corAddColumnForm.className = "cor-add-column-form" + "-" + fileNum + "-" + tabCounterPC[fileNum];
+			corAddColumnForm.className += " DE-series-map-select";
+			MapBody.appendChild(corAddColumnForm);
+		}
+		
+		var removeButton = document.createElement("button");
+		removeButton.className = "w3-button w3-border";
+		removeButton.innerHTML = "Remove";
+		removeButton.onclick = function(){
+			addColumnList = document.getElementsByClassName("cor-add-column-form" + "-" + fileNum + "-" + tabCounterPC[fileNum]);
+			if(addColumnList.length < 1){
+				return;
+			}
+			MapBody.removeChild(addColumnList[addColumnList.length - 1]);
+		}
+		PCNameDiv.appendChild(PCName);
+		PCNameDiv.appendChild(label1);
+		PCNameDiv.appendChild(star);
+		PCNameDiv.appendChild(label2);
+		
+		corFCColumnDiv.appendChild(corFCColumn);
+		corFCColumnDiv.appendChild(corFCColumnForm);
+		
+		addColumnsDiv.append(addColumns);
+		addColumnsDiv.append(addButton);
+		addColumnsDiv.append(removeButton);
+		
+		MapBody.appendChild(PCNameDiv);
+		MapBody.appendChild(corFCColumnDiv);
+		MapBody.appendChild(addColumnsDiv);
+		
+		PCMapBody.appendChild(MapBody);
+		PCMapBody.style.display = "block";
+	}
+		
+	async function addFileToTab(mode){
+		// Check that a file and input delimiter have been selected.
+		// If so add that file to the tab bar and tab body. 
+		// Otherwise alert the user that they need to select a file and 
+		// input delimiter first.
+		var filepath = document.getElementById(mode + "_Filepath").value;
+		var inputDelimiter;
+		var fileNum;
+		
+		if(filepath != "" && filepath != null){
+			let fileStatus = await eel.checkFileExists(filepath)();
+			inputDelimiter = document.getElementById(mode + "_In_Delim_Select").value;
+			if(inputDelimiter == "" || inputDelimiter == null || fileStatus == false){
+				alert("Please select a valid file and an input delimiter before adding the file.");
+				return;
+			}
+		}
+		else{
+			alert("Please select a file using browse button before adding the file.");
+			return
+		}
+		
+		// UPDATE THE TABS BAR.
+		if(mode == "NL"){
+			tabCounterNL = tabCounterNL + 1;
+			fileNum = tabCounterNL;
+		}else if(mode == "DE"){
+			tabCounterDE = tabCounterDE + 1;
+			fileNum = tabCounterDE;
+		}
+		var btn = document.createElement("BUTTON");
+		var currentFile = ("File" + fileNum);
+		btn.id = mode + "_" + currentFile + "_Tab";
+		btn.innerHTML = currentFile;
+		btn.className = "w3-bar-item w3-button " + mode + "-file-tab-bar";
+		btn.onclick = function() {
+			openFileTab(currentFile, mode);
+		}
+		document.getElementById(mode + "_Tabs_Bar").appendChild(btn);
+		
+		// CREATE THE TAB BODY FOR THIS NEW FILE.
+		
+		var fileBody = document.createElement("div");
+		fileBody.id = mode + "_" + currentFile;
+		fileBody.className = "w3-container " + mode + "-file-tab-body"
+		fileBody.style.display = "none";
+		
+		var fullFilepath = document.createElement("p");
+		fullFilepath.innerHTML = filepath;
+		fullFilepath.id = mode + "_Hidden_Filepath" + fileNum;
+		fullFilepath.style.display = "none";
+		
+		var inDelimiter = document.createElement("p");
+		inDelimiter.innerHTML = inputDelimiter;
+		inDelimiter.id = mode + "_Hidden_In_Delimiter" + fileNum;
+		inDelimiter.style.display = "none";
+		
+		var fileNameHeading = document.createElement("h3");
+		fileNameHeading.innerHTML = currentFile + " : " + filepath;
+		
+		var tableDescription = document.createElement("p");
+		tableDescription.innerHTML = "File Preview:";
+		
+		// Put the first 5 lines of the file into a table that goes within tab body.
+		let fiveLines = await eel.readFiveLines(filepath, inputDelimiter)();
+		// fiveLines is an array of arrays. Wherein each sub array is a single row from the input file.
+		
+		// Create the file preview table.
+		
+		var fileContents = document.createElement("table");
+		fileContents.className = "w3-table-all w3-responsive";
+		
+		var i;
+		for (i = 0; i < fiveLines.length; i++){
+			var j;
+			var row = document.createElement("tr");
+			for (j = 0; j < fiveLines[i].length; j++){
+				if(i == 0){
+					var cell = document.createElement("th");
+				}
+				else{
+					var cell = document.createElement("td");
+				}
+				cell.innerHTML = fiveLines[i][j];
+				row.appendChild(cell);
+			}
+			fileContents.appendChild(row);
+		}
+		
+		fileBody.appendChild(fullFilepath);
+		fileBody.appendChild(inDelimiter);
+		
+		fileBody.appendChild(fileNameHeading);
+		fileBody.appendChild(tableDescription);
+		fileBody.appendChild(fileContents);
+		
+		if(mode == "DE"){
+			defaultIdColumn = findIdColumn(fiveLines[0]);
+			defaultFCColumn = findFCColumn(fiveLines[0]);
+		}
+		
+		toReturn = [fileBody, fiveLines[0], filepath, inputDelimiter];
+		
+		return toReturn;
+		
+	}
+	
+	async function addFileToTabNL(){
+		let result = await addFileToTab("NL");
+		var fileBody = result[0];
+	
+		document.getElementById("NL_Tabs_Body").appendChild(fileBody);
+		document.getElementById("NL_Tabs_Body").style.display = "block";
+	}
+	
+	async function addFileToTabDE() {
+	
+		let result = await addFileToTab("DE");
+		var fileBody = result[0];
+		var headerRow = result[1];
+		var filepath = result[2];
+		var inputDelimiter = result[3];
+		
+		// Create form to select DE File Type.
+		
+		var FileTypeFormDE = createSelectorForm(["DE-Sample", "DE-Series"], "DE File Type");
+		FileTypeFormDE.style.width = "25%";
+		var FileTypeSelectDE = FileTypeFormDE.firstChild;
+		FileTypeSelectDE.id = "DE_File_Type_Select" + tabCounterDE;
+		var fileNum = tabCounterDE;
+		FileTypeSelectDE.onchange = function(){
+			//Note, it is important that I pass in fileNum, not tabCounter.
+			//This has to do with the fact that tabCounter is a global variable.
+			selectFileOptionsDE(fileNum);
+		}
+		
+		// Create file options for DE-Sample and DE-Series.
+		
+		var fileOptionsCommon = document.createElement("div");
+		fileOptionsCommon.id = "Common_File_Options" + tabCounterDE;
+		fileOptionsCommon.style.display = "none";
+		fileOptionsCommon.className = "w3-container";
+		var fileOptionsDESample = document.createElement("div");
+		fileOptionsDESample.id = "DE_Sample_File_Options" + tabCounterDE;
+		fileOptionsDESample.style.display = "none";
+		fileOptionsDESample.className = "w3-container w3-cell-row";
+		var fileOptionsDESeries = document.createElement("div");
+		fileOptionsDESeries.id = "DE_Series_File_Options" + tabCounterDE;
+		fileOptionsDESeries.style.display = "none";
+		fileOptionsDESeries.className = "w3-container";
+		var fileOptionsCommon2 = document.createElement("div");
+		fileOptionsCommon2.id = "Common_File_Options2" + tabCounterDE;
+		fileOptionsCommon2.style.display = "none";
+		fileOptionsCommon2.className = "w3-container";
+		
+		var idColumnIn, fcColumnIn, sample1ColumnIn, sample2ColumnIn;
+		var idColumnLabel, fcColumnLabel, sample1ColumnLabel, sample2ColumnLabel;
+		idColumnDiv = document.createElement("div");
+		idColumnDiv.className = "w3-container";
+		idColumnIn = document.createElement("input");
+		idColumnIn.id = "Id_Column" + tabCounterDE;
+		idColumnIn.value = defaultIdColumn;
+		idColumnIn.class = "w3-input";
+		idColumnIn.style.display = "inline";
+		idColumnIn.style.margin = "1%";
+		idColumnIn.onchange = function(){
+			confirmColumnNameValidity(headerRow, "Id_Column" + fileNum);
+		}
+		
+		fcColumnDiv = document.createElement("div");
+		fcColumnDiv.className = "w3-container";
+		fcColumnIn = document.createElement("input");
+		fcColumnIn.id = "Fc_Column" + tabCounterDE;
+		fcColumnIn.value = defaultFCColumn;
+		fcColumnIn.class = "w3-input";
+		fcColumnIn.style.display = "inline";
+		fcColumnIn.style.margin = "1%";
+		fcColumnIn.onchange = function(){
+			confirmColumnNameValidity(headerRow, "Fc_Column" + fileNum);
+		}
+		sample1ColumnDiv = document.createElement("div");
+		sample1ColumnDiv.className = "w3-container";
+		sample1ColumnIn = document.createElement("input");
+		sample1ColumnIn.id = "Sample1_Column" + tabCounterDE;
+		sample1ColumnIn.value = defaultSample1Column;
+		sample1ColumnIn.class = "w3-input";
+		sample1ColumnIn.style.display = "inline";
+		sample1ColumnIn.style.margin = "1%";
+		sample1ColumnIn.onchange = function(){
+			confirmColumnNameValidity(headerRow, "Sample1_Column" + fileNum);
+		}
+		sample2ColumnDiv = document.createElement("div");
+		sample2ColumnDiv.className = "w3-container";
+		sample2ColumnIn = document.createElement("input");
+		sample2ColumnIn.id = "Sample2_Column" + tabCounterDE;
+		sample2ColumnIn.value = defaultSample2Column;
+		sample2ColumnIn.class = "w3-input";
+		sample2ColumnIn.style.display = "inline";
+		sample2ColumnIn.style.margin = "1%";
+		sample2ColumnIn.onchange = function(){
+			confirmColumnNameValidity(headerRow, "Sample2_Column" + fileNum);
+		}
+		
+		idColumnLabel = document.createElement("p");
+		idColumnLabel.innerHTML = "ID Column Name:";
+		idColumnLabel.style.display = "inline";
+		idColumnLabel.style.margin = "1%";
+		fcColumnLabel = document.createElement("p");
+		fcColumnLabel.innerHTML = "Fold Change Column Name(s):";
+		fcColumnLabel.style.display = "inline";
+		fcColumnLabel.style.margin = "1%";
+		sample1ColumnLabel = document.createElement("p");
+		sample1ColumnLabel.innerHTML = "Sample1 Column Name:";
+		sample1ColumnLabel.style.display = "inline";
+		sample1ColumnLabel.style.margin = "1%";
+		sample2ColumnLabel = document.createElement("p");
+		sample2ColumnLabel.innerHTML = "Sample2 Column Name:";
+		sample2ColumnLabel.style.display = "inline";
+		sample2ColumnLabel.style.margin = "1%";
+		
+		PCMapButtonDESample = document.createElement("button");
+		PCMapButtonDESample.className = "w3-button w3-border";
+		PCMapButtonDESample.innerHTML = "Build PC Map";
+		PCMapButtonDESample.style.display = "block";
+		PCMapButtonDESample.style.margin = "1%";
+		PCMapButtonDESample.onclick = function(){
+			columnStatus = checkAllColumnNames(headerRow, "Id_Column" + fileNum,
+											   "Fc_Column" + fileNum, "Sample1_Column" + fileNum, "Sample2_Column" + fileNum);
+			if(columnStatus != true){
+				alert("Id, Fold Change, Sample1, and Sample2 columns values must be valid before generating pairwise comparison map.");
+			}
+			else{
+				displaySampleLabelsDE(filepath, inputDelimiter, sample1ColumnIn.value, sample2ColumnIn.value, fileNum);
+			}
+		}
+		
+		PCAddMapDESeries = document.createElement("button");
+		PCAddMapDESeries.className = "w3-button w3-border";
+		PCAddMapDESeries.innerHTML = "Add PC Map";
+		PCAddMapDESeries.style.display = "inline";
+		PCAddMapDESeries.onclick = function(){
+			columnStatus = confirmColumnNameValidity(headerRow, "Id_Column" + fileNum);
+			if(columnStatus != true){
+				alert("Id column value must be valid before generating pairwise comparison map.");
+			}
+			else{
+				addPCMapTabDESeries(headerRow, fileNum);
+			}
+		}
+		
+		PCRemoveMapDESeries = document.createElement("button");
+		PCRemoveMapDESeries.className = "w3-button w3-border";
+		PCRemoveMapDESeries.innerHTML = "Remove PC Map";
+		PCRemoveMapDESeries.style.display = "inline";
+		PCRemoveMapDESeries.onclick = function(){
+			removeMapFromTabPC(fileNum);
+		}
+		
+		PCResetMapDESeries = document.createElement("button");
+		PCResetMapDESeries.className = "w3-button w3-border";
+		PCResetMapDESeries.innerHTML = "Reset PC Map";
+		PCResetMapDESeries.style.display = "inline";
+		PCResetMapDESeries.onclick = function(){
+			resetMapTabPC(fileNum);
+		}
+		
+		var divider = document.createElement("hr");
+		
+		var filterSpace = document.createElement("div");
+		filterSpace.id = "Filter_Space" + fileNum;
+		filterSpace.className = "w3-container w3-border w3-border-blue";
+		
+		addFilterButton = document.createElement("button");
+		addFilterButton.className = "w3-button w3-border";
+		addFilterButton.innerHTML = "Add Filter";
+		addFilterButton.style.display = "inline";
+		addFilterButton.style.margin = "0.5%";
+		addFilterButton.onclick = function(){
+			addFilter(fileNum, headerRow);
+		}
+		
+		removeFilterButton = document.createElement("button");
+		removeFilterButton.className = "w3-button w3-border";
+		removeFilterButton.innerHTML = "Remove Filter";
+		removeFilterButton.style.display = "inline";
+		removeFilterButton.style.margin = "0.5%";
+		removeFilterButton.onclick = function(){
+			removeFilter(fileNum);
+		}
+		
+		resetFiltersButton = document.createElement("button");
+		resetFiltersButton.className = "w3-button w3-border";
+		resetFiltersButton.innerHTML = "Reset Filters";
+		resetFiltersButton.style.display = "inline";
+		resetFiltersButton.style.margin = "0.5%";
+		resetFiltersButton.onclick = function(){
+			resetFilters(fileNum);
+		}
+		
+		var PCSampleSpace = document.createElement("div");
+		PCSampleSpace.style.display = "none";
+		PCSampleSpace.id = "PC_Sample_Space" + fileNum;
+		PCSampleSpace.className = "w3-container w3-bottombar w3-topbar w3-leftbar w3-rightbar w3-border-pale-blue";
+		
+		var PCSeriesSpace = document.createElement("div");
+		PCSeriesSpace.id = "PC_Series_Space" + fileNum;
+		PCSeriesSpace.className = "w3-container";
+		var PCSeriesMapBar = document.createElement("div");
+		PCSeriesMapBar.className = "w3-bar";
+		PCSeriesMapBar.id = "PC_Series_Map_Bar" + fileNum;
+		PCSeriesMapBar.style.backgroundColor = "black";
+		PCSeriesMapBar.style.color = "white";
+		var PCSeriesMapBody = document.createElement("div");
+		PCSeriesMapBody.className = "w3-container w3-border w3-border-black";
+		PCSeriesMapBody.style.display = "none";
+		PCSeriesMapBody.id = "PC_Series_Map_Body" + fileNum;
+		
+		PCSeriesSpace.appendChild(PCSeriesMapBar);
+		PCSeriesSpace.appendChild(PCSeriesMapBody);
+		
+		idColumnDiv.appendChild(idColumnLabel);
+		idColumnDiv.appendChild(idColumnIn);
+		fileOptionsCommon.appendChild(idColumnDiv);
+		
+		fcColumnDiv.appendChild(fcColumnLabel);
+		fcColumnDiv.appendChild(fcColumnIn);
+		sample1ColumnDiv.appendChild(sample1ColumnLabel);
+		sample1ColumnDiv.appendChild(sample1ColumnIn);
+		sample2ColumnDiv.appendChild(sample2ColumnLabel);
+		sample2ColumnDiv.appendChild(sample2ColumnIn);
+		fileOptionsDESample.appendChild(fcColumnDiv);
+		fileOptionsDESample.appendChild(sample1ColumnDiv);
+		fileOptionsDESample.appendChild(sample2ColumnDiv);
+		fileOptionsDESample.appendChild(PCMapButtonDESample);
+		fileOptionsDESample.appendChild(PCSampleSpace);
+		
+		fileOptionsDESeries.appendChild(PCAddMapDESeries);
+		fileOptionsDESeries.appendChild(PCRemoveMapDESeries);
+		fileOptionsDESeries.appendChild(PCResetMapDESeries);
+		fileOptionsDESeries.appendChild(PCSeriesSpace);
+		
+		fileOptionsCommon2.appendChild(addFilterButton);
+		fileOptionsCommon2.appendChild(removeFilterButton);
+		fileOptionsCommon2.appendChild(resetFiltersButton);
+		fileOptionsCommon2.appendChild(filterSpace);
+		
+		fileBody.appendChild(FileTypeFormDE);
+		fileBody.appendChild(fileOptionsCommon);
+		fileBody.appendChild(fileOptionsDESample);
+		fileBody.appendChild(fileOptionsDESeries);
+		fileBody.appendChild(divider);
+		fileBody.appendChild(fileOptionsCommon2);
+		
+		document.getElementById("DE_Tabs_Body").appendChild(fileBody);
+		document.getElementById("DE_Tabs_Body").style.display = "block";
+		
+		// Check whether the default column values are valid.
+		checkAllColumnNames(headerRow, "Id_Column" + fileNum,
+							"Fc_Column" + fileNum, "Sample1_Column" + fileNum, "Sample2_Column" + fileNum);
+	}
+	
+	<!-- File browsing functions -->
+	
+	function showFilepath(filepath, mode){
+		filepathBoxId = mode + "_Filepath";
+		document.getElementById(filepathBoxId).value = filepath;
+	}
+	
+	async function launchFileDialog(mode){
+		let filepath = await eel.fileDialog()();
+		showFilepath(filepath, mode);
+	}
+	
+	function showOutputDirectory(filepath, mode){
+		outDirBoxId = mode + "_Out_Dir";
+		document.getElementById(outDirBoxId).value = filepath;
+	}
+	
+	async function launchDirectoryDialog(mode){
+		let filepath = await eel.directoryDialog()();
+		showOutputDirectory(filepath, mode);
+	}
+	
+	<!-- Final command execution functions -->
+	
+	async function buildQueryNL(){
+		filepaths = [];
+		inDelimiters = [];
+		var i;
+		for(i = 1; i <= tabCounterNL; i=i+1){
+			filepaths.push(document.getElementById("NL_Hidden_Filepath" + i).innerHTML);
+			inDelimiters.push(document.getElementById("NL_Hidden_In_Delimiter" + i).innerHTML);
+		}
+		var headerRow = [];
+		
+		var j;
+		for(j = 0; j < filepaths.length; j=j+1){
+			inputDelimiter = inDelimiters[j];
+			filepath = filepaths[j];
+			let fiveLines = await eel.readFiveLines(filepath, inputDelimiter)();
+			headerRow = headerRow.concat(fiveLines[0]);
+		}
+		
+		// Remove any previously listed pairwise comparisons, operators, and directions.
+		var pairwiseComparisonsArea = document.getElementById("NL_Pairwise_Comparisons");
+		while(pairwiseComparisonsArea.firstChild){
+			pairwiseComparisonsArea.removeChild(pairwiseComparisonsArea.firstChild);
+		}
+		
+		// Generate new pairwise comparison, operator, and direction buttons.
+		var groupText = document.createElement("p");
+		groupText.innerHTML = "Group Names:";
+		groupText.style.display = "block";
+		pairwiseComparisonsArea.append(groupText);
+		var grp;
+		for (grp of headerRow){
+			var button = document.createElement("button");
+			button.innerHTML = grp;
+			button.className = "w3-button w3-border";
+			button.onclick = function(){
+				var query = document.getElementById("NL_Query");
+				query.value = query.value + this.innerHTML;
+			}
+			pairwiseComparisonsArea.append(button);
+		}
+		
+		var operatorText = document.createElement("p");
+		operatorText.innerHTML = "Set Operators:";
+		operatorText.style.display = "block";
+		pairwiseComparisonsArea.append(operatorText);
+		operators = ["AND", "FAND", "OR", "DIFF"];
+		var op;
+		for (op of operators){
+			var button = document.createElement("button");
+			button.innerHTML = op;
+			button.className = "w3-button w3-border";
+			button.onclick = function(){
+				var query = document.getElementById("NL_Query");
+				query.value = query.value + "-" + this.innerHTML + "-";
+			}
+			pairwiseComparisonsArea.append(button);
+		}
+	}
+	
+	async function buildQueryDE(){
+	
+		//First check that there is at least 1 input file selected, 
+		//(filepath + input delimiter). For every selected input file check that DE File Type has been 
+		//selected, check that corresponding (DE-Series) or (DE-Sample) settings have been filled out.
+		//Also do my best to check the validity of all of these inputs. 
+		
+		//If any of the inputs are missing or invalid alert the user and do not list pairwise comparisons. 
+		//Otherwise list out pairwise comparisons as buttons.
+		
+		//Also list directionalities and set operators as buttons.
+		var pairwiseComparisons = [];
+		var sample1Column = "";
+		var sample2Column = "";
+		
+		var filepath = "";
+		var inDelim = "";
+		
+		var fileTypeDE = "";
+		
+		// Checking for presense of input files and file specific parameters.
+		
+		var i;
+		if(tabCounterDE > 0){
+			for(i=1; i <= tabCounterDE; i++)
+			{
+				//Check that DE File Type has been set.
+				var fileTypeDESelect = document.getElementById("DE_File_Type_Select" + i);
+				if(fileTypeDESelect.value == "DE File Type"){
+					alert("File" + i + " has missing parameters.");
+					return;
+				}else{
+					fileTypeDE = fileTypeDESelect.value;
+				}
+				
+				filepath = document.getElementById("DE_Hidden_Filepath" + i).innerHTML;
+				inDelim = document.getElementById("DE_Hidden_In_Delimiter" + i).innerHTML;
+				sample1Column = document.getElementById("Sample1_Column" + i).value;
+				sample2Column = document.getElementById("Sample2_Column" + i).value;
+				
+				if(fileTypeDE == 'DE-Sample'){
+					var sampleSpace = document.getElementById("PC_Sample_Space" + i);
+					var pcFileLabelsSample = [];
+					var pcNewLabelsSample = [];
+					var subDiv;
+					var j = 1;
+					for(subDiv of sampleSpace.children){
+						var ele;
+						for(ele of subDiv.children){
+							if(j % 2 == 0){
+								// This is an input box containing the new label.
+								pcNewLabelsSample.push(ele.value);
+							}
+							else{
+								// This is a paragraph element containing the file label.
+								pcFileLabelsSample.push(removeLastCharacter(removeLastCharacter(ele.textContent)));
+							}
+							j = j + 1;
+						}
+					}
+					let pcComparisonsSamples = await eel.findDESamplePCs(filepath, inDelim, sample1Column, sample2Column)();
+					// pcComparisonsSample is a list of lists wherein each sublist contains two label values.
+					var q;
+					for (q of pcComparisonsSamples){
+						label1 = convertValue(pcFileLabelsSample, pcNewLabelsSample, q[0]);
+						label2 = convertValue(pcFileLabelsSample, pcNewLabelsSample, q[1]);
+						pairwiseComparisons.push(label1 + "*" + label2);
+					}
+				}
+				else if(fileTypeDE == 'DE-Series'){
+					var seriesSpace = document.getElementById("PC_Series_Map_Body" + i);
+					var s;
+					for(s of seriesSpace.children){
+						var k;
+						console.log(s);
+						var PC = "";
+						for(k of s.children){
+							var o;
+							console.log(k);
+							for(o of k.children){
+								console.log(o);
+								console.log(o.className);
+								if(o.className.includes("DE-series-map-value-one")){
+									PC = PC + o.value;
+									console.log("Recorded file label.");
+								}
+								else if(o.className.includes("DE-series-map-text")){
+									PC = PC + o.textContent;
+								}
+								else if(o.className.includes("DE-series-map-value-two")){
+									PC = PC + o.value;
+									console.log("Recorded new label.");
+								}
+							}
+						}
+						console.log(PC);
+						pairwiseComparisons.push(PC);
+						console.log(pairwiseComparisons);
+					}
+				}			
+			}
+			
+		}		
+		else{
+			alert("At least one input file must be supplied before listing out pairwise comparisons.");
+		}
+		
+		console.log(pairwiseComparisons);
+		
+		// Display all pairwise comparisons as buttons.
+		
+		// Remove any previously listed pairwise comparisons, operators, and directions.
+		var pairwiseComparisonsArea = document.getElementById("DE_Pairwise_Comparisons");
+		while(pairwiseComparisonsArea.firstChild){
+			pairwiseComparisonsArea.removeChild(pairwiseComparisonsArea.firstChild);
+		}
+		
+		// Generate new pairwise comparison, operator, and direction buttons.
+		var pcsText = document.createElement("p");
+		pcsText.innerHTML = "Pairwise Comparisons:";
+		pcsText.style.display = "block";
+		pairwiseComparisonsArea.append(pcsText);
+		var pc;
+		for (pc of pairwiseComparisons){
+			var button = document.createElement("button");
+			button.className = "w3-button w3-border";
+			button.innerHTML = pc;
+			button.onclick = function(){
+				var query = document.getElementById("DE_Query");
+				query.value = query.value + this.innerHTML;
+			}
+			pairwiseComparisonsArea.append(button);
+		}
+		
+		var operatorText = document.createElement("p");
+		operatorText.innerHTML = "Set Operators:";
+		operatorText.style.display = "block";
+		pairwiseComparisonsArea.append(operatorText);
+		operators = ["AND", "FAND", "OR", "DIFF"];
+		var op;
+		for (op of operators){
+			var button = document.createElement("button");
+			button.className = "w3-button w3-border";
+			button.innerHTML = op;
+			button.onclick = function(){
+				var query = document.getElementById("DE_Query");
+				query.value = query.value + "-" + this.innerHTML + "-";
+			}
+			pairwiseComparisonsArea.append(button);
+		}
+		
+		var dirText = document.createElement("p");
+		dirText.innerHTML = "Directionality:"
+		dirText.style.display = "block";
+		pairwiseComparisonsArea.append(dirText);
+		
+		dirs = ["UP", "DOWN", "ALL"];
+		var dir;
+		for (dir of dirs){
+			var button = document.createElement("button");
+			button.className = "w3-button w3-border";
+			button.innerHTML = dir;
+			button.onclick = function(){
+				var query = document.getElementById("DE_Query");
+				query.value = query.value + ":" + this.innerHTML;
+			}
+			pairwiseComparisonsArea.append(button);
+		}
+	}
+	
+	async function generateCommandDE(){
+		//First check that there is at least 1 input file selected, 
+		//(filepath + input delimiter). For every selected input file check that DE File Type has been 
+		//selected, check that corresponding 4 (DE-Series) or 6 (DE-Sample) settings have been filled out.
+		//Finally, check that the query has been filled out, output file delimiter, and query. 
+		//Also do my best to check the validity of all of these inputs. 
+		
+		//If any of the inputs are missing or invalid alert the user and do not generate the command. 
+		//Otherwise, generate the command and place it in command input box.
+		
+		var command = "python ALister.py diff-expression";
+		
+		// Per file parameters.
+		var filepaths = "";
+		var inDelims = "-id ";
+		var pcMap = '-pc ';
+		var idColumns = '-n ';
+		var fcColumns = '-fc ';
+		var sample1Columns = '-s1 ';
+		var sample2Columns = '-s2 ';
+		var filters = '-f ';
+		
+		// Per run parameters. 
+		var outputDelim = "-od ";
+		var outputDir = "-o ";
+		var query = "-dq ";
+		
+		var fileTypeDE = "";
+		
+		// Checking for presense of input files and file specific parameters.
+		var i;
+		if(tabCounterDE > 0){
+			for(i=1; i <= tabCounterDE; i++)
+			{
+				//Check that DE File Type has been set.
+				var fileTypeDESelect = document.getElementById("DE_File_Type_Select" + i);
+				if(fileTypeDESelect.value == "DE File Type"){
+					alert("File" + i + " has missing parameters.");
+					return;
+				}else{
+					fileTypeDE = fileTypeDESelect.value;
+				}
+				
+				filepaths += document.getElementById("DE_Hidden_Filepath" + i).innerHTML + " ";
+				inDelims += document.getElementById("DE_Hidden_In_Delimiter" + i).innerHTML + " ";
+				idColumns += '"' + document.getElementById("Id_Column" + i).value + '" ';
+				sample1Columns += '"' + document.getElementById("Sample1_Column" + i).value + '" ';
+				sample2Columns += '"' + document.getElementById("Sample2_Column" + i).value + '" ';
+				
+				var filterSpace = document.getElementById("Filter_Space" + i);
+				if(filterSpace.children.length > 0)
+				{
+					filters = filters + '"';
+					var k;
+					for (k of filterSpace.children){
+						var l;
+						for (l of k.children){
+							if(l.nodeName == "FORM"){
+								filters += mapOperatorsToString(l.firstChild.value);
+							}
+							else if(l.className.includes("filter-value")){
+								filters += l.value;
+							}
+							else if(l.className.includes("filter-text")){
+								filters += l.textContent;
+							}
+						}
+						filters = filters + ",";
+					}
+					filters = removeLastCharacter(filters);
+					filters = filters + '" ';
+				}
+				
+				if(fileTypeDE == 'DE-Sample'){
+					fcColumns += '"' + document.getElementById("Fc_Column" + i).value;
+				
+					var sampleSpace = document.getElementById("PC_Sample_Space" + i);
+					var subDiv;
+					var j = 1;
+					pcMap += '"';
+					for(subDiv of sampleSpace.children){
+						var ele;
+						for(ele of subDiv.children){
+							if(j % 2 == 0){
+								// This is an input box containing the new label.
+								pcMap += ele.value;
+								pcMap += ",";
+							}
+							else{
+								// This is a paragraph element containing the file label.
+								pcMap = pcMap + ele.textContent;
+							}
+							j = j + 1;
+						}
+					}
+					// Remove the trailing comma.
+					pcMap = removeLastCharacter(pcMap);
+				}
+				else if(fileTypeDE == 'DE-Series'){
+					var seriesSpace = document.getElementById("PC_Series_Map_Body" + i);
+					var s;
+					pcMap += '"';
+					fcColumns = fcColumns + '"'
+					for(s of seriesSpace.children){
+						var o;
+						var PC = "";
+						for(o of s.children){
+							var k;
+							for (k of o.children){
+								if(k.className.includes("DE-series-map-value-one")){
+									pcMap += k.value;
+								}
+								else if(k.className.includes("DE-series-map-text")){
+									pcMap += k.textContent;
+								}
+								else if(k.className.includes("DE-series-map-value-two")){
+									pcMap += k.value + "->";
+								}
+								else if(k.nodeName == "FORM"){
+									if(k.firstChild.className.includes("DE-series-map-fc")){
+										fcColumns += k.firstChild.value + ","; 
+									}
+									pcMap += k.firstChild.value + ",";
+								}
+							}
+							if(o.nodeName == "FORM" && o.className.includes("DE-series-map-select")){
+								pcMap += o.firstChild.value + ",";
+							}
+							
+						}
+						// Remove the trailing comma.
+						pcMap = removeLastCharacter(pcMap);
+						pcMap = pcMap + ";";	
+					}
+					// Remove the trailing comma.
+					fcColumns = removeLastCharacter(fcColumns);
+					// Remove the trailing semicolon.
+					pcMap = removeLastCharacter(pcMap);
+					
+				}
+				pcMap = pcMap + '" ';
+				fcColumns = fcColumns + '" ';				
+			}
+			
+		}		
+		else{
+			alert("At least one input file must be supplied before listing out pairwise comparisons.");
+		}
+		
+		// Check that the query, output file delimiter, and output directory have been specified.
+		// Note: output file delimiter is selected by default and does not need to be checked.
+		var q = document.getElementById("DE_Query").value;
+		if(q == "" || q == null){
+			alert("Missing query value.");
+		}
+		
+		var dirpath = document.getElementById("DE_Out_Dir").value;
+		
+		if(dirpath != "" && dirpath != null){
+			let dirStatus = await eel.checkDirectoryExists(dirpath)();
+			if( dirStatus == false){
+				alert("Please select a valid output directory.");
+				return;
+			}
+		}
+		else{
+			alert("Please select an output directory using browse button.");
+			return;
+		}
+		
+		//Remove trailing spaces from file specific parameters.
+		filepaths = removeLastCharacter(filepaths);
+		inDelims = removeLastCharacter(inDelims);
+		pcMap = removeLastCharacter(pcMap);
+		idColumns = removeLastCharacter(idColumns);
+		fcColumns = removeLastCharacter(fcColumns);
+		sample1Columns = removeLastCharacter(sample1Columns);
+		sample2Columns = removeLastCharacter(sample2Columns);
+		filters = removeLastCharacter(filters);
+		
+		outputDelim = outputDelim + document.getElementById("DE_Out_Delim_Select").value;
+		outputDir = outputDir + dirpath;
+		query = query + '"' + q + '"';
+		
+		command = command + " " + filepaths + " " + pcMap + " " + query + " " + inDelims + " ";
+		command = command + idColumns + " " + fcColumns + " " + sample1Columns + " " + sample2Columns + " " + filters + " ";
+		command = command + outputDelim + " " + outputDir;
+		
+		var verbose = document.getElementById("DE_Verbose");
+		if(verbose.value == "yes"){
+			command += " -v";
+		}
+		
+		document.getElementById("DE_Command").value = command;
+	}
+	
+	async function generateCommandNL(){
+	
+		//First check that there is at least 1 input file selected, 
+		//(filepath + input delimiter). 
+		//Check that the query has been filled out, output file delimiter, and query. 
+		//Also do my best to check the validity of all of these inputs. 
+		
+		//If any of the inputs are missing or invalid alert the user and do not generate the command. 
+		//Otherwise, generate the command and place it in command input box.
+		
+		var command = "python ALister.py name-list";
+		
+		// Per file parameters.
+		var filepaths = "";
+		var inDelims = "-id ";
+		
+		// Per run parameters. 
+		var outputDelim = "-od ";
+		var outputDir = "-o ";
+		var query = "";
+		
+		// Checking for presense of input files and file specific parameters.
+		var x;
+		var i = 1;
+		if(tabCounterNL > 0){
+			var tabsBodyChildren = document.getElementById("NL_Tabs_Body").children;
+			for(x of tabsBodyChildren){
+				var y;
+				for(y of x.children){
+					if(y.id == "NL_Hidden_Filepath" + i){
+						// Grab Filepath.
+						filepaths = filepaths + y.innerHTML + " ";
+					}
+					else if(y.id == "NL_Hidden_In_Delimiter" + i){
+						// Grab Input Delimiter.
+						inDelims = inDelims + y.innerHTML + " ";
+					}
+				}
+				i = i + 1;
+			}
+		}
+		else{
+			alert("At least one input file must be supplied before generating command.");
+		}
+		
+		// Check that the query, output file delimiter, and output directory have been specified.
+		// Note: output file delimiter is selected by default and does not need to be checked.
+		var q = document.getElementById("NL_Query").value;
+		if(q == "" || q == null){
+			alert("Missing query value.");
+		}
+		
+		var dirpath = document.getElementById("NL_Out_Dir").value;
+		
+		if(dirpath != "" && dirpath != null){
+			let dirStatus = await eel.checkDirectoryExists(dirpath)();
+			if( dirStatus == false){
+				alert("Please select a valid output directory.");
+				return;
+			}
+		}
+		else{
+			alert("Please select an output directory using browse button.");
+			return;
+		}
+		
+		//Remove trailing spaces from file specific parameters.
+		filepaths = removeLastCharacter(filepaths);
+		inDelims = removeLastCharacter(inDelims);
+		
+		outputDelim = outputDelim + document.getElementById("NL_Out_Delim_Select").value;
+		outputDir = outputDir + dirpath;
+		query = query + '"' + q + '"';
+		
+		command = command + " " + query + " " + filepaths + " " + inDelims + " ";
+		command = command + outputDelim + " " + outputDir;
+		
+		var verbose = document.getElementById("NL_Verbose");
+		if(verbose.value == "yes"){
+			command += " -v";
+		}
+		
+		document.getElementById("NL_Command").value = command;
+	
+	}
+	
+	function showResponse(response, mode) {
+		var containerId = mode + "_Response";
+		var container = document.getElementById(containerId);
+
+		container.innerText = response;
+		container.style.display = 'block';
+	}
+
+	async function launchALister(mode) {
+		var commandId = mode + "_Command";
+		var command = document.getElementById(commandId).value;
+		let result = await eel.execute_ALister(command)();
+		showResponse(result, mode);
+	}
+	
+	</script>
+	
+	    <!-- Include eel.js - note this file doesn't exist in the 'web' directory -->
+    <script type="text/javascript" src="/eel.js"></script>
+
+		<!-- I did not want to edit w3.css so herein I put in a few custom styles -->
+	
+	<style>
+			.response-container {
+				display: none;
+				padding: 3rem;
+				margin: 3rem 5rem;
+				font-size: 120%;
+				border: 5px dashed #ccc;
+			}
+			
+			.tooltip {
+				position: relative;
+				display: inline-block;
+				border-bottom: 1px dotted black;
+			}
+
+			.tooltip .tooltiptext {
+				visibility: hidden;
+				width: 120px;
+				background-color: #555;
+				color: #fff;
+				text-align: center;
+				border-radius: 6px;
+				padding: 5px 0;
+				position: absolute;
+				z-index: 1;
+				bottom: 125%;
+				left: 50%;
+				margin-left: -60px;
+				opacity: 0;
+				transition: opacity 0.3s;
+			}
+
+			.tooltip .tooltiptext::after {
+				content: "";
+				position: absolute;
+				top: 100%;
+				left: 50%;
+				margin-left: -5px;
+				border-width: 5px;
+				border-style: solid;
+				border-color: #555 transparent transparent transparent;
+			}
+
+			.tooltip:hover .tooltiptext {
+				visibility: visible;
+				opacity: 1;
+			}
+			
+	</style>
+  </head>
+
+<body>
+
+<!-- Sidebar -->
+<div class="w3-sidebar w3-bar-block w3-border-right" style="display:none" id="mySidebar">
+  <button class="w3-bar-item w3-large" onclick="w3_close('mySidebar')">Close &times;</button>
+  <a href="#menu" class="w3-bar-item w3-button" onclick = "w3_close('documentation'); w3_open('menu');">Main Menu</a>
+  <a href="#documentation" class="w3-bar-item w3-button" onclick = "w3_close('menu'); w3_open('documentation');">Documentation</a>
+</div>
+
+<!-- Page Content -->
+<div class="w3-teal">
+  <button class="w3-button w3-teal w3-xlarge" onclick="w3_open('mySidebar')">☰</button>
+  <div class="w3-container">
+    <h1>A-Lister</h1>
+  </div>
+</div>
+
+<div class="w3-container" id = "menu">
+	<p>Select the comparison mode:</p>
+	<div class="w3-container w3-row-padding">
+		<div class="w3-col s6 w3-center w3-hover-opacity w3-container">
+			<img src = "heat-map-icon.jpg" onclick = "w3_open('DE_Mode'); w3_close('NameList_Mode');">
+			<p> Differential Expression Mode: Filter and compare entities (genes, proteins, methylation markers, etc.) across pairwise comparisons.</p>
+			<br>
+		</div>
+		<div class="w3-col s6 w3-center w3-hover-opacity w3-container">
+			<img src = "list2.png" onclick = "w3_open('NameList_Mode'); w3_close('DE_Mode');">
+			<p> Name List Mode: Compare multiple lists of names.</p>
+			<br>
+		</div>
+	</div>
+	
+	<div class="w3-container" style = "display: none;" id = "DE_Mode">
+	
+		<div class="w3-row">
+			<div class="w3-col s10">
+				<input class="w3-input w3-border" type="text" placeholder="Input Differential Expression File" id="DE_Filepath"></p>
+			</div>
+			<div class="w3-col s2">
+				<button class="w3-button w3-border" onClick="launchFileDialog('DE')">Browse</button>
+			</div>
+		</div>
+		
+		<form>
+		    <select class="w3-select w3-margin-bottom" name="option" id = "DE_In_Delim_Select" style="width:20%;">
+				<option value="" disabled selected>Input Delimiter</option>
+				<option value="tab">Tab</option>
+				<option value="comma">Comma</option>
+				<option value="colon">Colon</option>
+				<option value="semicolon">Semicolon</option>
+				<option value="space">Space</option>
+		    </select>
+		</form>
+		
+		<div class="w3-cell">
+			<button class="w3-button w3-border" onClick="addFileToTabDE()" style = "display:inline;">Add File</button>
+		</div>
+		<div class="w3-cell">
+			<button class="w3-button w3-border" onClick="removeFileFromTabDE()" style = "display:inline;">Remove File</button>
+		</div>
+		<div class="w3-cell">
+			<button class="w3-button w3-border" onClick="resetFileTab('DE')" style = "display:inline;">Reset Files</button>
+		</div>
+		
+		
+		<div class="w3-bar w3-margin-top" id = "DE_Tabs_Bar" style="background-color:teal;color:white;">
+		
+		</div>
+		
+		<div class = "w3-container w3-topbar w3-bottombar w3-leftbar w3-rightbar w3-border-teal" style = "display:none" id = "DE_Tabs_Body">
+
+		</div>
+		
+		<hr>
+		
+		<button class="w3-button w3-border w3-margin-bottom" onClick="buildQueryDE()">Build Query</button>
+		
+		<div id="DE_Pairwise_Comparisons">
+		
+		</div>
+		
+		<input class="w3-input w3-border w3-top-margin" type="text" style="width:50%;" placeholder="Query" id="DE_Query"></p>
+		
+		<hr>
+		
+		<form>
+			<select class="w3-select w3-margin-bottom" name="option" style = "width:20%;" id = "DE_Out_Delim_Select">
+				<option value="" disabled selected>Output Delimiter</option>
+				<option value="tab">Tab</option>
+				<option value="comma-row">Comma-Row</option>
+			</select>
+		</form>
+		
+		<div class="w3-row">
+			<div class="w3-col s10">
+				<input class="w3-input w3-border" type="text" placeholder="Output Directory" id="DE_Out_Dir"></p>
+			</div>
+			<div class="w3-col s2">
+				<button class="w3-button w3-border" onClick="launchDirectoryDialog('DE')" style = "display:inline-block;">Browse</button>
+			</div>
+		</div>
+		
+		<form>
+		    <select class="w3-select w3-margin-bottom" name="option" id = "DE_Verbose" style="width:20%;">
+				<option value="" selected disabled>Verbose</option>
+				<option value="no">No</option>
+				<option value="yes">Yes</option>
+		    </select>
+		</form>
+	
+		<hr>
+	
+		<button class="w3-button w3-border w3-margin-top w3-margin-bottom" onClick="generateCommandDE()" style = "display:block;">Generate Command</button>
+		
+		<div class="w3-row">
+			<div class="w3-col s10">
+				<input class="w3-input w3-border" type="text" placeholder = "Command" id="DE_Command"></p>
+			</div>
+			<div class="w3-col s2">
+				<button class="w3-button w3-border" onClick="launchALister('DE')">Launch</button>
+			</div>
+		</div>
+			
+			
+		<div class = "w3-container response-container" id="DE_Response"></div>
+			
+	</div>
+
+	<div class="w3-container" id = "NameList_Mode" style = "display: none;">
+		
+		<div class="w3-row">
+			<div class="w3-col s10">
+				<input class="w3-input w3-border" type="text" placeholder="Input Name List File" id="NL_Filepath"></p>
+			</div>
+			<div class="w3-col s2">
+				<button class="w3-button w3-border" onClick="launchFileDialog('NL')" style = "display:inline-block;">Browse</button>
+			</div>
+		</div>
+		
+		<form>
+		    <select class="w3-select w3-margin-bottom" name="option" style = "width:20%;" id = "NL_In_Delim_Select">
+				<option value="" disabled selected>Input Delimiter</option>
+				<option value="tab">Tab</option>
+				<option value="comma">Comma</option>
+		    </select>
+		</form>
+		
+		<div class="w3-cell">
+			<button class="w3-button w3-border" onClick="addFileToTabNL()">Add File</button>
+		</div>
+		<div class="w3-cell">
+			<button class="w3-button w3-border" onClick="removeFileFromTabNL()">Remove File</button>
+		</div>
+		<div class="w3-cell">
+			<button class="w3-button w3-border" onClick="resetFileTab('NL')">Reset Files</button>
+		</div>
+		
+		
+		<div class="w3-bar w3-margin-top" style="background-color:teal;color:white;" id = "NL_Tabs_Bar">
+		
+		</div>
+		
+		<div class = "w3-container w3-topbar w3-bottombar w3-leftbar w3-rightbar w3-border-teal" style = "display:none" id = "NL_Tabs_Body">
+
+		</div>
+		
+		<hr>
+		
+		<button class="w3-button w3-border w3-margin-bottom" onClick="buildQueryNL()">Build Query</button>
+		
+		<div id="NL_Pairwise_Comparisons">
+		
+		</div>
+		
+		<input class="w3-input w3-border" style = "width:50%;" type="text" placeholder="Query" id="NL_Query"></p>
+		
+		<hr>
+		
+		<form>
+			<select class="w3-select w3-margin-bottom" name="option" style = "width:20%;" id = "NL_Out_Delim_Select">
+				<option value="" disabled selected>Output Delimiter</option>
+				<option value="tab">Tab</option>
+				<option value="comma-row">Comma-Row</option>
+			</select>
+		</form>
+		
+		<div class="w3-row">
+			<div class="w3-col s10">
+				<input class="w3-input w3-border" type="text" placeholder="Output Directory" id="NL_Out_Dir"></p>
+			</div>
+			<div class="w3-col s2">
+				<button class="w3-button w3-border" onClick="launchDirectoryDialog('NL')">Browse</button>
+			</div>
+		</div>
+		
+		<form>
+		    <select class="w3-select w3-margin-bottom" name="option" id = "NL_Verbose" style="width:20%;">
+				<option value="" selected disabled>Verbose</option>
+				<option value="no">No</option>
+				<option value="yes">Yes</option>
+		    </select>
+		</form>
+	
+		<hr>
+	
+		<button class="w3-button w3-border w3-margin-top w3-margin-bottom" onClick="generateCommandNL()" style = "display:block;">Generate Command</button>
+		
+		<div class="w3-row">
+			<div class="w3-col s10">
+				<input class="w3-input w3-border" type="text" placeholder = "Command" id="NL_Command"></p>
+			</div>
+			<div class="w3-col s2">
+				<button class="w3-button w3-border" onClick="launchALister('NL')">Launch</button>
+			</div>
+		</div>
+		<div class = "w3-container response-container" id="NL_Response"></div>
+		
+	</div>
+	
+</div>
+
+<div class = "w3-container" id = "documentation" style = "display: none;">
+	<h2> Full documentation can be found on A-Lister GitHub page: </h2>
+	<a href = "https://github.com/staslist/A-Lister">https://github.com/staslist/A-Lister</a>
+</div>
+
+<script>
+</script>
+     
+</body>
+</html> 

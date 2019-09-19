@@ -26,16 +26,6 @@ import argparse
 import sys
 import os
 from pathlib import Path
-#from AListerCoreFunctionality import Repeated_Prompt_With_Choices
-#from AListerCoreFunctionality import Same_Elements
-
-#from prompt_toolkit import prompt
-#from prompt_toolkit.history import FileHistory
-#from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
-#from prompt_toolkit.completion import WordCompleter
-
-#from colorama import init
-#from colorama import Fore, Back, Style
 
 class NameListExampleAction(argparse.Action):
 
@@ -50,14 +40,14 @@ class NameListExampleAction(argparse.Action):
         example1 = ("# Example Name List 1:\n"
                     "# One name-list file. Three groups: Control, Treated1, and Treated2.\n"
                     "# Query is an intersection of two groups.\n\n"
-                    'python ALister.py name-list "Treated1-AND-Treated2" E:/Data/Sample_Input'
+                    'python ALister_CLI.py name-list "Treated1-AND-Treated2" E:/Data/Sample_Input'
                     '/Name_List/names_comma.txt -id comma -o E:/Data/Sample_Output/Name_List/Example1/ '
                     '-od tab -v')
         print(example1)
         print()
         example2 = ("# Example Name List 2:\n"
                     "# Two name-list files. Complex query across groups from both files. \n\n"
-                    'python ALister.py name-list "Set1-DIFF-(Control-OR-(Treated1-AND-Treated2))" '
+                    'python ALister_CLI.py name-list "Set1-DIFF-(Control-OR-(Treated1-AND-Treated2))" '
                     'E:/Data/Sample_Input/Name_List/fileA.txt E:/Data/Sample_Input/Name_List/names_comma.txt '
                     "-id tab comma -o E:/Data/Sample_Output/Name_List/Example2/ -od comma-row -v")
         print(example2)
@@ -79,7 +69,7 @@ class DiffExpressionExampleAction(argparse.Action):
                     "# Two Cuffdiff files. One pairwise comparison and two condition labels (q1,q2) in each file. \n"
                     "# Filter each file with log2(fold_change), q_value, value1, and value2 attributes.\n"
                     "# Execute a difference query over ZNF143_veh*ZNF143_E2 and Ctl_veh*Ctl_E2.\n\n"
-                    "python ALister.py diff-expression "
+                    "python ALister_CLI.py diff-expression "
                     'E:/Data/Sample_Input/DE_Sample/GSE76453_cuffdiff_siCtl.diff '
                     'E:/Data/Sample_Input/DE_Sample/GSE76453_cuffdiff_siZNF143.diff '
                     '-pc "q1->Ctl_veh,q2->Ctl_E2" "q1->ZNF143_veh,q2->ZNF143_E2" '
@@ -92,7 +82,7 @@ class DiffExpressionExampleAction(argparse.Action):
         example2 = ("# ZNF143 vs Control Cells (DE Example 2):\n"
                     "# One Cuffdiff file. One pairwise comparison and two condition labels (q1,q2). \n"
                     "# Filter file with several attributes. Execute an ALL direction query (2 direction patterns - U,D).\n\n"
-                    'python ALister.py diff-expression '
+                    'python ALister_CLI.py diff-expression '
                     'E:/Data/Sample_Input/DE_Sample/GSE76453_cuffdiff_E2.diff '
                     '-pc "q1->Ctl,q2->ZNF143" -dq "Ctl*ZNF143:ALL" '
                     '-o E:/Data/Sample_Output/DE/Example2/ -od tab -n "gene" -v '
@@ -103,7 +93,7 @@ class DiffExpressionExampleAction(argparse.Action):
         example3 = ("# Exercise in Obese vs Lean Individuals (DE Example 3):\n"
                     "# One Cuffdiff file with four condition labels (LeanPre,LeanPost,OvobPre,OvobPost).\n"
                     "# Filter file with several attributes. Launch an ALL direction query (4 direction patterns - UU,UD,DU,DD).\n\n"
-                    "python ALister.py diff-expression "
+                    "python ALister_CLI.py diff-expression "
                     'E:/Data/Sample_Input/DE_Sample/GSE108643_Cuffdiff.txt '
                     '-pc "LeanPre->LPE,LeanPost->LPO,OvobPre->OPE,OvobPost->OPO" '
                     '-dq "LPE*LPO:ALL-AND-OPE*OPO:ALL" -o E:/Data/Sample_Output/DE/Example3/ '
@@ -114,7 +104,7 @@ class DiffExpressionExampleAction(argparse.Action):
         example4 = ("# Exercise in Obese vs Lean Individuals (DE Example 4):\n"
                     "# One Cuffdiff file with four condition labels (LeanPre,LeanPost,OvobPre,OvobPost).\n"
                     "# Filter file with several attributes. Execute a complex query over several pairwise comparisons.\n\n"
-                    "python ALister.py diff-expression "
+                    "python ALister_CLI.py diff-expression "
                     'E:/Data/Sample_Input/DE_Sample/GSE108643_Cuffdiff.txt '
                     '-pc "LeanPre->LPE,LeanPost->LPO,OvobPre->OPE,OvobPost->OPO" '
                     '-dq "(LPE*LPO-FAND-OPE*OPO)-DIFF-(LPE*LPO-AND-OPE*OPO)" '
@@ -130,7 +120,7 @@ class DiffExpressionExampleAction(argparse.Action):
                     "# A single csv file built from three Deseq2 files. Three pairwise comparisons total.\n"
                     "# Filter each pairwise comparison according to the fold change and p-value columns.\n"
                     "# Execute an ALL direction query (8 direction patterns - UUU,UUD,UDU,UDD,DDD,DDU,DUD,DUU).\n\n"
-                    "python ALister.py diff-expression "
+                    "python ALister_CLI.py diff-expression "
                     'E:/Data/Sample_Input/DE_Series/GSE126785_M2M4M5.csv '
                     '-pc "M2Low*M2High->log2(FC)M2,P-valueM2,P-adjM2;M4Low*M4High->log2(FC)M4,'
                     'P-valueM4,P-adjM4;M5Low*M5High->log2(FC)M5,P-valueM5,P-adjM5" '
@@ -145,7 +135,7 @@ class DiffExpressionExampleAction(argparse.Action):
                     "# One csv file with two pairwise comparisons and one Deseq2 file with one pairwise comparison.\n"
                     "# Three pairwise comparisons total. Filter the pairwise comparisons across both files according to fold change. \n"
                     "# Execute a complex query across all pairwise comparisons.\n\n"
-                    "python ALister.py diff-expression "
+                    "python ALister_CLI.py diff-expression "
                     'E:/Data/Sample_Input/DE_Series/GSE126785_M2M4.csv '
                     'E:/Data/Sample_Input/DE_Series/GSE126785_M5.txt '
                     '-pc "M2Low*M2High->log2(FC)M2,P-valueM2,P-adjM2;M4Low*M4High->log2(FC)M4,'
@@ -160,7 +150,7 @@ class DiffExpressionExampleAction(argparse.Action):
                     "# Three DESeq2 files with one pairwise comparison in each file.\n"
                     "# Filter the pairwise comparisons across both files according to fold change. \n"
                     "# Execute a complex query across all pairwise comparisons.\n\n"
-                    "python ALister.py diff-expression "
+                    "python ALister_CLI.py diff-expression "
                     'E:/Data/Sample_Input/DE_Series/GSE126785_M2.txt '
                     'E:/Data/Sample_Input/DE_Series/GSE126785_M4.txt '
                     'E:/Data/Sample_Input/DE_Series/GSE126785_M5.txt '
@@ -178,7 +168,7 @@ class DiffExpressionExampleAction(argparse.Action):
                     "# Filter the Cuffdiff file according to fold change and p-value.\n"
                     "# Filter the DESeq2 file according to base mean, fold change, and adjusted p-value. \n"
                     "# Execute a query across EVP*D and CPOS*CNEG pairwise comparisons.\n\n"
-                    "python ALister.py diff-expression "
+                    "python ALister_CLI.py diff-expression "
                     'E:/Data/Sample_Input/DE_Series/GSE114528_differential_exp_EVP_D.tsv '
                     'E:/Data/Sample_Input/DE_Sample/GSE99397_CreNeg-MHCPos_vs_CrePos-MHCNeg.diff '
                     '-pc "EVP*D->log2FoldChange" "CrePos-MHCNeg->CPOS,CreNeg-MHCPos->CNEG" '
@@ -194,23 +184,21 @@ class DiffExpressionExampleAction(argparse.Action):
 class AListerCLI():
     
     def __init__(self):
-        usage_string = ("\n  ALister.py command \n"
+        usage_string = ("\n  ALister_CLI.py command \n"
                         "commands: \n"
                         "  diff-expression Analyze differential expression data.\n"
                         "  name-list       Analyze name list data.\n")
-                        #"  command-builder Launch an interactive CLI that guides the user through \n"
-                        #"                  writing an A-Lister run command. \n")
         
-        self.parser = argparse.ArgumentParser(description = "A-Lister v1.0: a differentially expressed entities "+
+        self.parser = argparse.ArgumentParser(description = "A-Lister v1.1: a differentially expressed entities "+
                                               "analysis package. Namely, A-Lister assists in identification "+
                                               "of top genes, proteins, and methylation markers of interest "+ 
                                               "across multiple pairwise comparisons. ",
                                               usage = usage_string)
         self.subparsers = self.parser.add_subparsers()
         
-        usage_string = ("\n  ALister.py name-list <query> <input-file> [<input-file> ...] [options] \n"
-                        "  ALister.py name-list (-e | --examples) \n"
-                        "  ALister.py name-list (-h | --help) \n \n")
+        usage_string = ("\n  ALister_CLI.py name-list <query> <input-file> [<input-file> ...] [options] \n"
+                        "  ALister_CLI.py name-list (-e | --examples) \n"
+                        "  ALister_CLI.py name-list (-h | --help) \n \n")
         self.parser2 = self.subparsers.add_parser('name-list', description = "Analyze name list data.", 
                                                   usage = usage_string,
                                                   formatter_class=argparse.RawTextHelpFormatter)
@@ -249,10 +237,10 @@ class AListerCLI():
                                   choices = ['tab', 'comma-row'], default = ['tab'])
         self.parser2.add_argument('-v', action = 'count',
                                   help = "Make the output more verbose.")
-        usage_string = ("\n  ALister.py diff-expression <input-file> [<input-file> ...] -pc <pc-mapping> [<pc-mapping> ...] "
+        usage_string = ("\n  ALister_CLI.py diff-expression <input-file> [<input-file> ...] -pc <pc-mapping> [<pc-mapping> ...] "
                         "-dq <direct-query> [options] \n"
-                        "  ALister.py diff-expression (-e | --examples) \n"
-                        "  ALister.py diff-expression (-h | --help) \n \n")
+                        "  ALister_CLI.py diff-expression (-e | --examples) \n"
+                        "  ALister_CLI.py diff-expression (-h | --help) \n \n")
         self.parser3 = self.subparsers.add_parser('diff-expression', 
                                                   description = "Analyze differential expression data.",
                                                   usage = usage_string,
@@ -389,12 +377,9 @@ class AListerCLI():
                                   choices = ['tab', 'comma-row'], default = ['tab'])
         self.optional.add_argument('-v', action = 'count',
                                    help = "Make the output more verbose.")
-
-        #self.parser4 = self.subparsers.add_parser('command-builder', description = 'The interactive CLI that helps the user to construct ' +
-        #                                'a valid A-Lister run command.')
         
     def acceptInput(self, test=None):
-        
+
         if(test!=None):
             sys.argv = test
         
@@ -407,11 +392,6 @@ class AListerCLI():
                 self.parser2.print_help()
             elif(sys.argv[1] == 'diff-expression'):
                 self.parser3.print_help()
-            #elif(sys.argv[1] == 'command-builder'):
-            #    self.parser4.print_help()
-            #    print()
-            #    print()
-            #    self.launchCMDBuilder()
             elif(sys.argv[1] == '--help' or sys.argv[1] == '-h'):
                 self.parser.print_help()
             sys.exit()

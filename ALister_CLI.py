@@ -47,36 +47,46 @@ from CLI import AListerCLI
 # 1) Refactor (+optimize) + document + test (Windows CMD Prompt + Ubuntu Shell)
 #     (+expand test suite as necessary) code. (RE DO AFTER EVERY NEW FEATURE)
 # Major Iteration Features:
-# 2)Gene and protein expression integration. (UNIPROT) [v1.1]
+# Will resume on January 1st of 2020. 
+# 2)Major refactoring of all code so far. For GUI code consider integrating Vue or overhauling 
+#   the code completely with Electron based solution [Electron (HTML + CSS + JAVASCRIPT + Vue?)].
+#   Integration of latest development technologies. Packaging for pip (also docker?).
+#   Improvements to CLI & GUI - especially ease of use and input validation.
+#   Improvements to README. Potentially development of stand alone documentation. [v1.2]
+# 3)Gene, protein, methylation expression integration. ID mapping in general. (UNIPROT) [v1.x]
+# The extent of this update will heavily depend on feasibility / quality of ID mapping services.
 # a)Uniprot approach. Filter data. Convert to same genomic data type. 
-#   Perform set operations.  
-# 3)Methylation and gene expression integration. [v1.2] 
-# 4)GUI. [v1.3]
+#   Perform set operations. Explore feasibility. 
+#   Lack of 1 to 1 mapping seems highly problematic. 
+# 4)Web Hosted GUI. Back End / Full Stack Frameworks: (Django, Flask, Ruby on Rails, MERN, LAMP).
+# Django or Flask, seem best suited, but Ruby/MERN/LAMP are viable as well.
+# Will need to figure out logistics regarding data security, server location, and 
+# etc. before we can proceed with this. We already developed web based frontend in v1.1.
+# Simply create a server back-end and host on a server. [v1.y]
 
 # Other Tasks:
-# 1)a)Find a way to get rid of quote marks in the command line arguments.*
+# 0)a) Adopt Agile Scrum methodology. Automate and integrate as much as possible.
+# c) Improve content of output files & verbose mode.
+# d) Update README with GUI documentation. Update README regarding output files if necessary.
+#    Update README regarding ID Mapping.
+# e) Address all other issues raised by Trina Norden-Krichmar. 
 
-#   Command-Builder:  *
-#   c)Add header look up.
-#   d)File browsing/auto-suggestion. 
-#   d2)Sense of progression.
-#   d3)Build query last. Provide hints by showing sample mappings, etc.
-#   d4)More aggressive error checking during command building.
+# 1)a)CLI & GUI ease of use + input validation.*
 
 # 2)a)Gene family fuzzy matching. Fuzzy matching configuration. 
 # b)Get top N most differentially expressed genes. 
+# c)Sort the filtered DE files output by a column.
 # c)Replace all complex custom dictionaries (ex: file data) with class objects.
+# d)Allow filtering without query.
 
 # 3)a)Test ALL core computation corner cases.*
 #   b)Expand Test Suites
 #    i) No -o flag test case(s). Have to re-factor loggers first in order to release data_dump.txt.
-#   c)Setup a streamlined Windows/Unix(Command Line,Batch Job)/Mac OS test scheme.
+#    ii) Sample input examples -> test cases using sample output. 
+#    iii) Create test cases with empty pairwise comparisons (after filtering).
+#   c)Research: Automated GUI testing.
+#   d)Setup a streamlined Windows/Unix(Command Line,Batch Job)/Mac OS test scheme.
 #   https://realpython.com/python-testing/#executing-your-first-test
-
-#   d)Select distribution option:
-#     e)Distribute as a Python package through Github*/Pip*/Conda?/Docker??
-
-# 4) Security/Cloud/Etc.
   
 def Main_Helper(parameters:dict, input_files:list)->list:
     result = []
@@ -97,6 +107,11 @@ def Main_Helper(parameters:dict, input_files:list)->list:
         total_input_data = Merge_Name_List_Files_Data(input_files)
         driver = AListerNameListClass(total_input_data, out_dir, out_ftype, v)
         result = driver.compute(query_d_list, query_s_list)
+        
+    # Turn off the logger.
+    #print("Returning results.")
+    
+    parameters['logger'].manualDel()
     
     return result
 
@@ -122,3 +137,4 @@ def Test_Main(args):
     
 if __name__ == '__main__':
     main()
+    #print("A-Lister terminated.")
