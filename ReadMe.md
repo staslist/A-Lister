@@ -163,7 +163,7 @@ for a given pairwise comparison.
 
 *ALL* is a special modifier that results in multiple queries. 
 In one query ALL is replaced by UP. In the other query ALL is replaced by DOWN.
-A query containing N ALL directions is transformed into N^2 queries. 
+A query containing N ALL directions is transformed into 2^N queries. 
 Each query is then executed and the results for each query are output into the 
 output files.  
 
