@@ -1,4 +1,7 @@
-﻿# A-Lister v1.1
+﻿I will be overhauling A-Lister into a webtool with complementary CL and GU interfaces.
+ Planned time of completion: q4 of 2021
+ 
+ # A-Lister v1.1
 
 A-Lister is a dual interface (CLI & GUI) tool that assists with analysis of differentially expressed entities (DEEs), such as differentially expressed genes (DEGs), differentially expressed proteins (DEPs), and differentially methylated positions/regions (DMPs/DMRs), across multiple pairwise comparisons. 
 
