@@ -1,5 +1,5 @@
-# I will be overhauling A-Lister into a webtool with complementary CL and GU interfaces.
-# Planned time of completion: q4 of 2021.
+## I will be overhauling A-Lister into a webtool with complementary CL and GU interfaces.
+## Planned time of completion: q4 of 2021.
  
  # A-Lister v1.1
 
