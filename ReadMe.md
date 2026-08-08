@@ -4,7 +4,7 @@ A-Lister is a dual interface (CLI & GUI) tool that assists with analysis of diff
 
 ## Upcoming
 
-I will be overhauling A-Lister into a web app with complementary CL and GU interfaces if I can find a way to host the tool without incurring significant costs. 
+Currently no plans to make any changes. However, I will respond to any raised issues and or conduct maintenance if needed. 
 
 ## Installation
 
